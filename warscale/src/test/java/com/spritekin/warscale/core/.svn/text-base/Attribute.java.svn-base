@@ -1,0 +1,29 @@
+package test.spritekin.warscale.core;
+
+import com.spritekin.warscale.core.TextAttribute;
+import com.spritekin.warscale.core.WarscaleObject;
+
+public class Attribute {
+	public static void main(String[] args) {
+		
+		testTextAttribute();
+		
+	}
+	
+	public static void testTextAttribute() {
+		
+		WarscaleObject wo = new WarscaleObject("Dummy Object");
+		wo.setAttribute(WarscaleObject.ATTRIBUTE_TYPE, "Dummy type");
+
+		TextAttribute na = new TextAttribute(wo, "TextAttribute");
+		na.setBase("This is the base.");
+		na.addModifier("The object name is ["+WarscaleObject.ATTRIBUTE_NAME+"].\n");
+		na.addModifier("The object type is ["+WarscaleObject.ATTRIBUTE_TYPE+"].\n");
+		System.out.println(na.getResult());
+		na.addModifier("==This is an replacement");
+		System.out.println(na.getResult());
+		
+		
+	}
+
+}

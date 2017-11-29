@@ -1,0 +1,12 @@
+Architecture design
+
+com.spritekin.warscale.utils
+A package for all small tools that makes our life easier like string processors or javascript utilities.
+
+com.spritekin.warscale.core
+A package for all very core declarations. This defines the very central classes that will be extended or aggregated by other classes.
+This includes:
+- Expression - Text string that holds a value declaration, may be on the form of a function.
+- Property - A expression that can be adjusted by other properties.
+- WarscaleObject - All warscale objects inherit from this.
+- Reference - All reference data tables inherit from this.

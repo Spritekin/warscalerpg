@@ -1,0 +1,39 @@
+package test.spritekin.warscale.core;
+
+public class Expression {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+
+		testTextExpression();
+		testNumberExpression();
+	}
+
+	public static void testTextExpression() {
+	}
+	
+	public static void testNumberExpression() {
+		com.spritekin.warscale.core.Expression exp =  new com.spritekin.warscale.core.Expression("2 + [Fire  ]/[ Water ] * 5 / [ Fire  ]");
+		java.util.HashMap<String, String> vars = exp.getVariableList();
+		if(vars.containsKey("Fire"))
+			vars.put("Fire", "8");
+		//This should return the expression with fire replaced
+		System.out.println("This should return the expression with fire replaced = " + exp.evaluate(vars));
+		
+		if(vars.containsKey("Water"))
+			vars.put("Water", "bad value");
+		//This should fully evaluate, fail and return 0 as it is numeric
+		System.out.println("This should fully evaluate, fail and return 0 as it is numeric = " + exp.evaluate(vars));
+
+		if(vars.containsKey("Water"))
+			vars.put("Water", "9");
+
+		//This should fully evaluate and return the result as it is numeric
+		System.out.println("This should fully evaluate and return the result as it is numeric = " + exp.evaluate(vars));
+
+	}
+	
+
+}

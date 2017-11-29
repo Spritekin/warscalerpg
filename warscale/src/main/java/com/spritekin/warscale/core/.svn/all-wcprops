@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/spritekin_warscale/!svn/ver/7/WarscaleLib/src/com/spritekin/warscale/core
+END
+Expression.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/spritekin_warscale/!svn/ver/7/WarscaleLib/src/com/spritekin/warscale/core/Expression.java
+END
+MaterialCategoryAttribute.java
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/spritekin_warscale/!svn/ver/7/WarscaleLib/src/com/spritekin/warscale/core/MaterialCategoryAttribute.java
+END
+Attribute.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/spritekin_warscale/!svn/ver/7/WarscaleLib/src/com/spritekin/warscale/core/Attribute.java
+END
+DamageTypeAttribute.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/spritekin_warscale/!svn/ver/7/WarscaleLib/src/com/spritekin/warscale/core/DamageTypeAttribute.java
+END
+TextAttribute.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/spritekin_warscale/!svn/ver/7/WarscaleLib/src/com/spritekin/warscale/core/TextAttribute.java
+END
+WarscaleObject.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/spritekin_warscale/!svn/ver/7/WarscaleLib/src/com/spritekin/warscale/core/WarscaleObject.java
+END
+MoneyAttribute.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/spritekin_warscale/!svn/ver/7/WarscaleLib/src/com/spritekin/warscale/core/MoneyAttribute.java
+END
+NumberAttribute.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/spritekin_warscale/!svn/ver/7/WarscaleLib/src/com/spritekin/warscale/core/NumberAttribute.java
+END

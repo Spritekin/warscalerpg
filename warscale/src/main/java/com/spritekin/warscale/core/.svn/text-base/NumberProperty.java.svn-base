@@ -1,0 +1,94 @@
+package com.spritekin.warscale.core;
+
+import javax.script.ScriptException;
+import java.util.HashMap;
+
+import com.spritekin.warscale.core.Expression;
+
+//A number attribute treats the values as numbers, it will attempt to add or multiply them.
+// The modifiers are applied in the order they come. So if a multiplier is added to the modifier list, then a sum, then they will be operated in that order
+// The values expressions can have the following prefixes
+// + - x / : Standard operators for example 4 +2 x2 will return (4+2)x2 = 12, but 4 x2 +2 will return 10.
+// ==       : The value is set to this amount regardless of any past operations
+
+public class NumberAttribute extends Attribute {	
+
+	public NumberAttribute(WarscaleObject parent, String name) {
+		super(parent, name);
+		setType(ATTRIBUTETYPE_NUMBER);
+	}
+	
+	//Returns a double value from the 
+	private Double getDoubleValue(Expression v) {
+		if(v.isEmpty())
+			return 0d;
+		String s = v.getExpression();
+		
+		try {
+			return Double.parseDouble(s);
+		}
+		catch(NumberFormatException e) {
+			System.out.println("NumberAttribute::getDoubleValue - Returning 0 on invalid expression : " + s );
+		}
+		return 0d;	//Any invalid format returns 0
+	}
+	
+	public void recomputeAttributeTotal() {
+		HashMap<String, String> vars = base.getVariableList();
+		vars = gatherVariableData(vars);
+		String res = base.evaluate(vars);
+
+		//Should I evaluate here?
+		//For some attributes described as a/b it would mean an operation
+		
+		for(Expression mod : getModifiers()) {
+			if(mod.isEmpty())
+				continue;
+			
+			vars = mod.getVariableList();
+			vars = gatherVariableData(vars);
+			String modResult = mod.evaluate(vars);
+			String eval = "";
+			try {
+				if(modResult.startsWith("=="))
+					res = modResult.substring(2);
+				else if(modResult.startsWith("+") || modResult.startsWith("-") || modResult.startsWith("*") || modResult.startsWith("/")) {
+					eval = res + modResult;
+					res = (String)com.spritekin.utils.JavascriptUtils.eval(eval);
+				}
+				else {	//If it has no prefix, assume an addition
+					eval = res + "+" + modResult;
+					res = (String)com.spritekin.utils.JavascriptUtils.eval(eval);
+				}
+			}
+			catch(ScriptException e) {
+				res = eval;
+				System.out.println("NumberAttribute::recomputeAttributeTotal - Unable to operate the expression : " + modResult );				
+				//e.printStackTrace();
+			}
+		}
+		setResult(res);
+	}
+	/*
+	public static void main(String[] args) {
+		NumberAttribute na = new NumberAttribute(null, "Test");
+		na.setBase(new Expression("1"));
+		System.out.println(na.getTotal().getExpression());
+		na.addModifier(new Expression("-1234.5"));
+		System.out.println(na.getTotal().getExpression());
+		na.addModifier(new Expression("+1235.5"));
+		System.out.println(na.getTotal().getExpression());
+		na.addModifier(new Expression("This is an error"));				
+		System.out.println(na.getTotal().getExpression());
+		
+		try {
+			System.out.println((String)com.spritekin.utils.JavascriptUtils.eval("2" + "-2"));	
+			System.out.println((String)com.spritekin.utils.JavascriptUtils.eval("2" + "+" + "-2"));	
+			System.out.println((String)com.spritekin.utils.JavascriptUtils.eval("2" + "+(" + "-2" + ")"));	
+		}
+		catch(ScriptException e) {
+			e.printStackTrace();
+		}
+	}
+	*/
+}

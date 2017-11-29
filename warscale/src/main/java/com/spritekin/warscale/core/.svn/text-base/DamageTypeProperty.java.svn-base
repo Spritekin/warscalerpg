@@ -1,0 +1,43 @@
+package com.spritekin.warscale.core;
+
+import com.spritekin.warscale.combat.DamageType;
+import com.spritekin.warscale.core.Expression;
+import java.util.HashMap;
+
+//A text attribute treats the values as text. It will try to concatenate the values
+// The values expressions can have the following prefixes
+// ==       : The value is set to this text regardless of any past operations
+
+public class DamageTypeAttribute extends Attribute {	
+
+	public DamageTypeAttribute(WarscaleObject parent, String name) {
+		super(parent, name);
+		setType(ATTRIBUTETYPE_TEXT);
+	}
+	
+	public void recomputeAttributeTotal() {
+		HashMap<String, String> vars = base.getVariableList();
+		vars = gatherVariableData(vars);
+		String res = base.evaluate(vars);
+
+		DamageType dtS = new DamageType(res);
+		dtS.addDamageType(res);
+
+		for(Expression mod : getModifiers()) {
+			if(mod.isEmpty())
+				continue;
+
+			vars = mod.getVariableList();
+			vars = gatherVariableData(vars);
+			String modResult = mod.evaluate(vars);
+			
+			if(modResult.startsWith("=="))
+				dtS.setDamageType(modResult.substring(2));
+			else
+				dtS.addDamageType(modResult);
+		}
+		
+		setResult(dtS.toString());
+	}
+	
+}

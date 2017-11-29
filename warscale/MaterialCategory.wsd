@@ -1,0 +1,14 @@
+{
+ "Name" : "MaterialCategory",
+ "Type" : "MaterialCategory",
+ "Data" : [
+  { "Gemstone": 	[ "BaseHardness number 14",	"MeasureUnits text ct" ] },
+  { "Metal": 	[ "BaseHardness number 12",	"MeasureUnits text kg" ] },
+  { "Stone":		[ "BaseHardness number 10",	"MeasureUnits text kg" ] },
+  { "Wood":		[ "BaseHardness number 8", 	"MeasureUnits text kg" ] },
+  { "Nature":	[ "BaseHardness number 6",	"MeasureUnits text kg" ] },
+  { "Leather":	[ "BaseHardness number 4",	"MeasureUnits text sqm" ] },
+  { "Cloth":		[ "BaseHardness number 2",	"MeasureUnits text sqm" ] }
+ ]
+}
+	

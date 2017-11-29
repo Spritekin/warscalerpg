@@ -1,0 +1,207 @@
+package com.spritekin.warscale.currency;
+
+import java.util.HashMap;
+
+//This class tracks warscale money
+// Money is a collection of coins on different types
+// Money is maintained this way so that the coins on each type are never mixed
+public class Money {
+	private static String BRONZE_PIECE 		= "bp";
+	private static String SILVER_PIECE 		= "sp";
+	private static String GOLD_PIECE 		= "gp";
+	private static String TITANIUM_PIECE	= "tp";
+	protected static HashMap<String, Double> conversion = new HashMap<String, Double>();
+	static {
+		conversion.put(BRONZE_PIECE, 1d);
+		conversion.put(SILVER_PIECE, 100d);
+		conversion.put(GOLD_PIECE, 10000d);
+		conversion.put(TITANIUM_PIECE, 1000000d);
+	}
+
+	protected HashMap<String, Double> money = new HashMap<String, Double>();
+	
+	public Money() {
+		money.put(TITANIUM_PIECE, 0d);
+		money.put(GOLD_PIECE, 0d);
+		money.put(SILVER_PIECE, 0d);
+		money.put(BRONZE_PIECE, 0d);
+	}
+
+	private void clear() {
+		for(String s : money.keySet()) {
+			money.put(s, 0d);
+		}
+	}
+
+	//Set the coins of a certain type
+	//type must be specified
+	public void set(String coins) {
+		clear();
+		while(coins.length() > 0) {
+			String c = com.spritekin.utils.StringUtils.getValueBefore(coins, ",");
+			coins = com.spritekin.utils.StringUtils.getValueAfter(coins, ",");
+			if(isValidMoneyExpr(c))
+				add(c);
+		}		
+	}
+
+	//Truncates the excess of each expression and moves excesses to the next level
+	private void truncate() {
+		Double excess = money.get(TITANIUM_PIECE) - Math.floor(money.get(TITANIUM_PIECE));
+		money.put(TITANIUM_PIECE, Math.floor(money.get(TITANIUM_PIECE)));
+		money.put(GOLD_PIECE, money.get(GOLD_PIECE) + excess * 100);
+
+		
+		excess = money.get(GOLD_PIECE) - Math.floor(money.get(GOLD_PIECE));
+		money.put(GOLD_PIECE, Math.floor(money.get(GOLD_PIECE)));
+		money.put(SILVER_PIECE, money.get(SILVER_PIECE) + excess * 100);
+
+		excess = money.get(SILVER_PIECE) - Math.floor(money.get(SILVER_PIECE));
+		money.put(SILVER_PIECE, Math.floor(money.get(SILVER_PIECE)));
+		money.put(BRONZE_PIECE, Math.floor(money.get(BRONZE_PIECE) + excess * 100));
+		
+	}
+
+	public void scale(double scale) {
+		money.put(TITANIUM_PIECE, money.get(TITANIUM_PIECE) * scale);
+		money.put(GOLD_PIECE, money.get(GOLD_PIECE) * scale);
+		money.put(SILVER_PIECE, money.get(SILVER_PIECE) * scale);
+		money.put(BRONZE_PIECE, money.get(BRONZE_PIECE) * scale);
+		truncate();
+		
+	}
+	
+	public void add(String moneyExpr) {
+		if(!isValidMoneyExpr(moneyExpr))
+			return;
+
+		while(moneyExpr.length() > 0) {
+			String c = com.spritekin.utils.StringUtils.getValueBefore(moneyExpr, ",");
+			moneyExpr = com.spritekin.utils.StringUtils.getValueAfter(moneyExpr, ",");
+
+			String type = getMoneyExprType(c);
+			Double amt = getMoneyExprValue(c);
+		
+			money.put(type, money.get(type) + amt);
+		}
+	}
+
+	//Returns all converted to this coin type
+	public String getAs(String type) {
+		if(!isValidType(type))
+			return "";
+		
+		//Transform everything to the minimum common type bp, then scale to the 
+		Double inBP = money.get(TITANIUM_PIECE) * conversion.get(TITANIUM_PIECE) +
+						money.get(GOLD_PIECE) * conversion.get(GOLD_PIECE) +
+						money.get(SILVER_PIECE) * conversion.get(SILVER_PIECE) +
+						money.get(BRONZE_PIECE) * conversion.get(BRONZE_PIECE);
+
+		Double toType = inBP / conversion.get(type);
+		return ""+(int)Math.floor(toType) + type;
+		
+	}
+
+	public String get(String type) {
+		if(!isValidType(type))
+			return "";
+		return money.get(type) + type;
+	}
+	
+	//Returns the money type, basically cuts the last 2 characters from the expression
+	//This works with a single expression, non comma separated
+	private String getMoneyExprType(String moneyExpr) {
+		return moneyExpr.substring(moneyExpr.length()-2);		
+	}
+
+	//Returns the money type, basically cuts the last 2 characters from the expression
+	private Double getMoneyExprValue(String moneyExpr) throws NumberFormatException {
+		return Double.parseDouble(moneyExpr.substring(0, moneyExpr.length() - 2));
+	}
+
+	//Checks if this is a valid money expression
+	public boolean isValidMoneyExpr(String moneyExpr) {
+		while(moneyExpr.length() > 0) {
+			String c = com.spritekin.utils.StringUtils.getValueBefore(moneyExpr, ",");
+			moneyExpr = com.spritekin.utils.StringUtils.getValueAfter(moneyExpr, ",");
+			//Separate the sections on the expression
+			try {
+				Double value = getMoneyExprValue(c);
+			}
+			catch(NumberFormatException e) { //System.out.println("Money::isValidMoneyExpr - Not a valid value " + c); 
+				return false; 
+			}
+			String type = getMoneyExprType(c);
+			if(!isValidType(type)) { 
+				//System.out.println("Money::isValidMoneyExpr - Not a valid type " + c); 
+				return false; 
+			}
+		}
+		return true;
+	}
+
+	public boolean isValidType(String currency) {
+		if(currency.equals(BRONZE_PIECE) || currency.equals(SILVER_PIECE) || currency.equals(GOLD_PIECE) || currency.equals(TITANIUM_PIECE))
+			return true;
+		//System.out.println("Money::isValidType - Not a valid value " + currency);
+		return false;
+	}
+	
+	public String toString() {
+		String res = "";
+		if(money.containsKey(TITANIUM_PIECE) && money.get(TITANIUM_PIECE) > 1)
+			res = ((int)Math.floor(money.get(TITANIUM_PIECE))) + TITANIUM_PIECE;
+		
+		if(money.containsKey(GOLD_PIECE) && money.get(GOLD_PIECE) > 1) {
+			if(res.length() > 0) res += ",";
+			res += ((int)Math.floor(money.get(GOLD_PIECE))) + GOLD_PIECE;
+		}
+
+		if(money.containsKey(SILVER_PIECE) && money.get(SILVER_PIECE) > 1) {
+			if(res.length() > 0) res += ",";
+			res += ((int)Math.floor(money.get(SILVER_PIECE))) + SILVER_PIECE;
+		}
+
+		if(money.containsKey(BRONZE_PIECE) && money.get(BRONZE_PIECE) > 1) {
+			if(res.length() > 0) res += ",";
+			res += ((int)Math.floor(money.get(BRONZE_PIECE))) + BRONZE_PIECE;
+		}
+		return res;
+	}
+
+	public String toStringBase() {
+		String res = "";
+		if(money.containsKey(TITANIUM_PIECE) && money.get(TITANIUM_PIECE) > 1)
+			res = money.get(TITANIUM_PIECE) + TITANIUM_PIECE;
+		
+		if(money.containsKey(GOLD_PIECE) && money.get(GOLD_PIECE) > 1) {
+			if(res.length() > 0) res += ",";
+			res += money.get(GOLD_PIECE) + GOLD_PIECE;
+		}
+
+		if(money.containsKey(SILVER_PIECE) && money.get(SILVER_PIECE) > 1) {
+			if(res.length() > 0) res += ",";
+			res += money.get(SILVER_PIECE) + SILVER_PIECE;
+		}
+
+		if(money.containsKey(BRONZE_PIECE) && money.get(BRONZE_PIECE) > 1) {
+			if(res.length() > 0) res += ",";
+			res += money.get(BRONZE_PIECE) + BRONZE_PIECE;
+		}
+		return res;
+	}
+
+	public static void main(String[] argv) {
+
+		Money m = new Money();
+		m.set("2tp,3gp,4sp,5bp");
+		m.add("20tp,30gp,40sp,50bp");
+		m.scale(2);
+		m.scale(1.7);
+		System.out.println(m.toString());
+		System.out.println(m.toStringBase());
+		
+	}
+
+	
+}

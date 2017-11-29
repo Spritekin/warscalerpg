@@ -1,0 +1,60 @@
+package com.spritekin.warscale.material;
+
+public class MaterialCategory {
+
+	public static String MATERIALCATEGORY_GEMSTONE 	= "Gemstone";
+	public static String MATERIALCATEGORY_METAL 	= "Metal";
+	public static String MATERIALCATEGORY_WOOD 		= "Wood";
+	public static String MATERIALCATEGORY_NATURE 	= "Nature";
+	public static String MATERIALCATEGORY_LEATHER 	= "Leather";
+	public static String MATERIALCATEGORY_CLOTH 	= "Cloth";
+	private static java.util.HashMap<String, MaterialCategory> categorySet = new java.util.HashMap<String, MaterialCategory>();
+
+	static {
+		categorySet.put(MATERIALCATEGORY_GEMSTONE, new MaterialCategory(MATERIALCATEGORY_GEMSTONE,12));
+		categorySet.put(MATERIALCATEGORY_METAL, new MaterialCategory(MATERIALCATEGORY_METAL,10));
+		categorySet.put(MATERIALCATEGORY_WOOD, new MaterialCategory(MATERIALCATEGORY_WOOD,8));
+		categorySet.put(MATERIALCATEGORY_NATURE, new MaterialCategory(MATERIALCATEGORY_NATURE,6));
+		categorySet.put(MATERIALCATEGORY_LEATHER, new MaterialCategory(MATERIALCATEGORY_LEATHER,4));
+		categorySet.put(MATERIALCATEGORY_CLOTH, new MaterialCategory(MATERIALCATEGORY_CLOTH,2));
+	}
+
+	private String name = "";
+	private int hardness = 0;
+
+	private MaterialCategory(String name, int hardness) {
+		this.name = name;
+		this.hardness = hardness;
+	}
+
+	public static MaterialCategory get(String categoryName) {
+		return categorySet.get(categoryName);
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public int getHardness() {
+		return hardness;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof MaterialCategory) {
+			if(this.getName().equals(((MaterialCategory)obj).getName())) 
+				return true;
+		}
+		return false;
+	}
+
+	public boolean isHarderThan(String other) {
+		return isHarderThan(get(other));
+	}
+	
+	public boolean isHarderThan(MaterialCategory other) {
+		if(this.getHardness() > other.getHardness())
+			return true;
+		return false;
+	}
+}
