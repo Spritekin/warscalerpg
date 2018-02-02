@@ -1,25 +1,31 @@
-package com.spritekin.warscale.material;
+package com.spritekin.warscale.skills;
 
-import com.spritekin.warscale.core.DataType;
 import com.spritekin.warscale.core.WarscaleObject;
 
 //A material is a modifier. As such it extends the warscle object
-public class Material extends WarscaleObject {
+public class Skills extends WarscaleObject {
 	public static final String MATERIAL = "Material";
 
-	// Properties
-	public static final String MATERIALHARDNESS 	= "MaterialHardness";	// The hardness of the material
-	public static final String MATERIALQUALITY 	= "MaterialQuality";		// The material quality
-	public static final String MATERIALMODIFIER 	= "MaterialModifier";	// Modifiers for using this material
+	public static final String MATERIALHARDNESS 	= "MaterialHardness";
+	public static final String MATERIALQUALITY 	= "MaterialQuality";
+	public static final String MATERIALMODIFIER 	= "MaterialModifier";
 
-	public Material(String name, String category, String quality) {
+	public Skills(String name, String category, int quality) {
 		super(name, MATERIAL, "", "", "", null);
-		addProperty(MaterialCategory.MATERIALCATEGORY, MaterialCategory.MATERIALCATEGORY, category);	//named modifier
-		addProperty(MATERIALQUALITY, 	DataType.NUMBER, quality);
-		addProperty(MATERIALMODIFIER,	DataType.NUMBER, "["+MATERIALQUALITY+"]/5");
-		addProperty(MATERIALHARDNESS,	DataType.NUMBER, "["+MaterialCategory.MATERIALCATEGORY+"."+MaterialCategory.BASEHARDNESS+"] + ["+MATERIALMODIFIER+"]");
 	}
 	
+	public int getQuality() {
+		return Integer.parseInt(getProperty(MATERIALQUALITY).getValue());
+	}
+
+	public int getHardness() {
+		return Integer.parseInt(getProperty(MATERIALHARDNESS).getValue());
+	}
+
+	public boolean isHigherQualityThan(Skills other) { 
+		return this.getQuality() > other.getQuality(); 
+	}; 
+
 	//Returns a price for one unit of this material
 	/*
 	public Money getPrice() {
@@ -45,5 +51,10 @@ public class Material extends WarscaleObject {
 		return m;
 	}
 	*/
-		
+	
+	//Returns a price for one unit of this material
+	public int getModifier() {
+		return Integer.parseInt(getProperty(MATERIALMODIFIER).getValue());
+	}
+	
 }

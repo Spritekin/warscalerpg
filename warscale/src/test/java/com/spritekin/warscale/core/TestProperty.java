@@ -9,27 +9,40 @@ import com.spritekin.warscale.core.WarscaleObject;
 import com.spritekin.warscale.core.PropertyFactory;
 
 public class TestProperty extends WarscaleTestCase {
-	
-	public static void testTextAttribute() {
+
+	public static void testSetPropertyBase() {
 		//Testing properties	
 		System.out.println("TestProperty::testTextAttribute");
-		WarscaleObject wo = new WarscaleObject("Dummy Object");
-		wo.setProperty(WarscaleObject.PROPERTY_TYPE, "Dummy type");
+		WarscaleObject wo = new WarscaleObject("Dummy Object", null);
+		wo.setProperty(WarscaleObject.TYPE, "Dummy type");
 
+		// Create three properties with the same name
 		TextProperty na = new TextProperty(wo, "TextAttribute");
 		na.setBase("This is the base.");
 		
 		assertEquals("Invalid base", "This is the base.", na.getValue());
- 
+	}
+		
+	public static void testPropertyAddition() {
+		//Testing properties	
+		System.out.println("TestProperty::testTextAttribute");
+		WarscaleObject wo = new WarscaleObject("Dummy Object", "Dummy type", "", "", "", null);
+
+		// Create three properties with the same name
+		TextProperty na = new TextProperty(wo, "TextAttribute");
+		na.setBase("This is the base.");
+		 
 		TextProperty nm = new TextProperty(wo, "TextAttribute");
-		nm.setBase("The object name is ["+WarscaleObject.PROPERTY_NAME+"].\n");
+		nm.setBase("The object name is ["+WarscaleObject.NAME+"].\n");
 
 		TextProperty tm = new TextProperty(wo, "TextAttribute");
-		tm.setBase("The object type is ["+WarscaleObject.PROPERTY_TYPE+"].\n");
+		tm.setBase("The object type is ["+WarscaleObject.TYPE+"].\n");
 
+		// Now I will add the modifier nm to na so I should have a concatenation
 		na.addModifier(nm);		
 		assertEquals("Invalid base", "This is the base.The object name is Dummy Object.\n", na.getValue());
 
+		// Now I will add even more modifiers to na so the description should be longer
 		na.addModifier(tm);
 		na.addModifier(tm);
 		na.addModifier(tm);
@@ -54,10 +67,10 @@ public class TestProperty extends WarscaleTestCase {
 		assertEquals("Invalid base", "This is the base.The object type is Dummy type.\nThe object type is Dummy type.\n", na.getValue());
 
 	}
-
+	
 	public static void testNumberProperty() {
 		System.out.println("TestProperty::testNumberProperty");
-		WarscaleObject parent = new WarscaleObject("Parent Object");
+		WarscaleObject parent = new WarscaleObject("Parent Object", null);
 		NumberProperty number = (NumberProperty)PropertyFactory.newPropertyOfType(DataType.NUMBER, parent, "TestNumberProperty");
 		number.setBase("1");
 		assert number.getValue().equals("1") : "Invalid value: expected 1, found" + number.getValue();

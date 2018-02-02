@@ -3,6 +3,8 @@ package com.spritekin.warscale.core;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.spritekin.warscale.utils.StringUtils;
+
 // grodriguez
 // A property is an expression plus a collection of other properties called modifiers.
 // The modifiers are operated in order against the base expression in order to get a final expression that is then calculated.
@@ -25,6 +27,15 @@ import java.util.HashMap;
 // Each time a modifier is added or removed, the property is marked as dirty and will be recomputed the next time the getValue function
 //  is invoked. The result is kept in the value attribute so it doesn't need to be recomputed all the time.
 // The property keeps any operation sign as returned by its modifiers so it is possible for a expression to return "+5"
+// A expression can be described in a single string as "PropertyName PropertyType PropertyExpression"
+//  so the two first words become the property name and datatype and the remainder is the expression
+//
+// A property can be marked as "shared" which means it will be transmitted to the parent mount of this parent object.
+//  For example, if a sword has a shared property "Melee/Slash +5" the sword is mounted on a character, then the
+//  character receives the Melee/Slash +5 property. However the sword material or its hardness or its age are not passed to the
+//  character because these are not shared properties.
+// Properties are not shared by default.
+
 public abstract class Property {
 	
 	protected WarscaleObject parent = null;
@@ -33,12 +44,12 @@ public abstract class Property {
 	private boolean dirty = true;
 	protected String value = null;
 	protected ArrayList<Property> modifiers = new ArrayList<Property>();
+	protected boolean shared = false;
 
 	protected Property(WarscaleObject parent, String name, String datatype, String expression) {
 		setName(name);
 		setParent(parent);
 		base = new Expression(datatype, expression);
-		
 	}
 
 	public WarscaleObject getParent() {
@@ -61,11 +72,18 @@ public abstract class Property {
 		return getValue("");
 	}
 
+	// This method is used to dig deeper into the properties of the value
+	// Not all properties (like number of text) support a deeper digging, only properties
+	// of types that are inside a library.
+	// For example, if the property type is "Material" and the value is "Gold" and the expression is "MaterialHardness" then the
+	//  property will dig the Material library for the MaterialHardness of Gold.
+	// Note if the value is not properly evaluated the query of the expression might fail.
+	//
+	// If no expression is sent then the value is returned.
 	public String getValue(String expression) {		
 		if(dirty) recomputePropertyValue();
 		if (expression.length() > 0) {
 			// Use the expression data type to find the reference table in the library
-			// Note that it is possible there was some computation error
 			return Library.getValue(base.getDatatype(), value, expression);
 		}
 		return value;
@@ -90,6 +108,14 @@ public abstract class Property {
 		return this;
 	}
 
+	public void setShared(boolean shared) {
+		this.shared = shared;
+	}
+
+	public boolean isShared() {
+		return shared;
+	}
+	
 	protected void setValue(String value) {
 		this.value = value;
 		dirty = false;
@@ -142,18 +168,19 @@ public abstract class Property {
 		HashMap<String, String> vars = base.getVariableList();
 		vars = gatherVariableData(vars);
 		
+		// Create an object of the property type that will handle the requests
 		initAccummulator(vars);
 		
 		for(Property mod : getPropertyModifiers()) {
-
 			//Ignore expressions with empty base values
 			if(mod.getBase().isEmpty())
 				continue;
-
-			//Let the mod evaluate itself as much as it can
-			mod.recomputePropertyValue();
 			
+			// Try getting the value of the modifier
+			// This will use the modifier parent if any
 			String modValue = mod.getValue();
+			
+			// Any remaining variables, use this object parent as data source
 			vars = com.spritekin.warscale.utils.StringUtils.getVariables(modValue);
 			vars = gatherVariableData(vars);
 			modValue = com.spritekin.warscale.utils.StringUtils.replaceVariables(modValue, vars);
@@ -165,7 +192,7 @@ public abstract class Property {
 							
 	
 	protected HashMap<String, String> gatherVariableData(HashMap<String, String> vars) {
-		//Fill in from parent attributes
+		//Fill in from parent attributes if it exists
 		if( getParent() != null ) {
 			for(String key:vars.keySet()) {
 				String data = parent.getPropertyValue(key);

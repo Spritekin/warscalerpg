@@ -1,4 +1,4 @@
-package com.spritekin.warscale.material;
+package com.spritekin.warscale.power;
 
 import com.spritekin.warscale.core.DataType;
 import com.spritekin.warscale.core.WarscaleObject;

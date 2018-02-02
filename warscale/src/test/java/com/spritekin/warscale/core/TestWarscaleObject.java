@@ -13,15 +13,15 @@ public class TestWarscaleObject extends WarscaleTestCase {
 		
 		System.out.println("TestWarscaleObject::testObjectCreation");
 
-		WarscaleObject o = new WarscaleObject("TestItem", WarscaleObject.OBJECTTYPE_ITEM, Item.ITEMSUBTYPE_WEAPON, Weapon.WEAPONTRAIT_SWORD, Weapon.WEAPONSUBTRAIT_MELEE);
-		assert 	Weapon.WEAPONTRAIT_SWORD == o.getPropertyValue(Item.PROPERTY_TRAIT): "Invalid trait";
+		WarscaleObject o = new WarscaleObject("TestItem", Item.ITEM, Item.WEAPON, Weapon.WEAPONTRAIT_SWORD, Weapon.WEAPONSUBTRAIT_MELEE, null);
+		assert 	Weapon.WEAPONTRAIT_SWORD == o.getPropertyValue(Item.TRAIT): "Invalid trait";
 
 	}
 	
 	// Tests if a property can access the values from another property in an object
 	public static void testPropertyReferences() {
 		System.out.println("TestWarscaleObject::testPropertyReferences");
-		WarscaleObject parent = new WarscaleObject("Parent");
+		WarscaleObject parent = new WarscaleObject("Parent", null);
 		parent.addProperty("a", DataType.NUMBER, "1");
 		parent.addProperty("b", DataType.NUMBER, "[a]");
 		
@@ -32,7 +32,7 @@ public class TestWarscaleObject extends WarscaleTestCase {
 	// Tests if a property can access the values from another property which in is an object in turn
 	public static void testComplexPropertyReferences() {
 		System.out.println("TestWarscaleObject::testComplexPropertyReferences");
-		WarscaleObject parent = new WarscaleObject("Parent");
+		WarscaleObject parent = new WarscaleObject("Parent", null);
 		parent.addProperty("a", DataType.NUMBER, "1");
 		parent.addProperty("b", DataType.NUMBER, "[a]");
 		

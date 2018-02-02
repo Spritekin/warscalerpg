@@ -1,17 +1,6 @@
 package com.spritekin.warscale.core;
 
 import java.util.HashMap;
-import java.util.Iterator;
-
-import com.spritekin.warscale.material.Material;
-import com.spritekin.warscale.material.MaterialTable;
-
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
 /*
  * grodriguez
@@ -20,12 +9,25 @@ import org.json.simple.parser.JSONParser;
  */
 public class Library {
 	// All ReferenceTables are registered here
-	protected static java.util.HashMap<String, ReferenceTable> library = new HashMap<String, ReferenceTable>();
+	protected static java.util.Map<String, ReferenceTable> library = new HashMap<String, ReferenceTable>();
 
-	static {		
-		fromWarscaleData("MaterialCategory.wsd");
-		//library.put(MaterialCategory.MATERIALCATEGORY, new MaterialCategoryTable());
-		library.put(Material.MATERIAL, new MaterialTable());
+	static {	
+		// Materials
+		fromWarscaleYAML("resources/items/MaterialCategory.yml");
+		fromWarscaleYAML("resources/items/Material.yml");
+
+		// Skills and specialisations
+		//fromWarscaleData("Skill.wsd");
+		
+		// Perks and powers
+		//fromWarscaleData("Perk.wsd");
+		fromWarscaleYAML("resources/powers/Power.yml");
+
+		// Items
+		//fromWarscaleData("Item.wsd");
+
+		// Creatures
+		//fromWarscaleYAML("creatures/Creature.wsd");
 	}
 	
 	public static ReferenceTable get(String table) {
@@ -54,7 +56,18 @@ public class Library {
 	
 	// Load a data file as a table
 	public static void fromWarscaleData(String filename) {
-		ReferenceTable table = ReferenceTable.fromWarscaleData("MaterialCategory.wsd");
+		ReferenceTable table = ReferenceTable.fromWarscaleData(filename);
 		library.put(table.getName(), table);
 	}
+	
+	// Load a data file as a table
+	public static void fromWarscaleYAML(String filename) {
+		ReferenceTable table = ReferenceTable.fromWarscaleYAML(filename);
+		
+		if(library.containsKey(table.getName())) 
+			library.get(table.getName()).append(table);
+		else 
+			library.put(table.getName(), table);
+	}
+	
 }

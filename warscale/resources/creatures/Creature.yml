@@ -1,0 +1,28 @@
+---
+Name: Creature
+Class:
+    Humanoid:
+        Type: Creature
+        Properties: [
+            "Subtype text Humanoid",
+            "Description text Generic humanoid. Other humanoids inherit from this one",
+            "Size number 2",
+            "AverageHeightMale number 1.80",
+            "AverageHeightFemale number 1.70",
+            "Fire number 2",
+            "Water number 2",
+            "Air number 2",
+            "Life number 2",
+            "Death number 2",
+            "Earth number 2"
+        ]
+    Human:
+        Type: Creature
+        Inherits: Humanoid
+        Properties: [
+            "Description text Humans are the first race to awaken. In a human all the magical elements combine harmoniously making them flexible, adaptable and very diplomatic.",
+        ]
+        Power: [
+            "Fast_learner 0",
+            "Experienced 0"
+        ]

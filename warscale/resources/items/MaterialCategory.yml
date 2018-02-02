@@ -1,0 +1,45 @@
+---
+Name: MaterialCategory
+Class:
+    Gemstone:
+        Type: MaterialCategory
+        Properties: [
+            "BaseHardness number 14",
+            "MeasureUnits text ct"
+        ]
+    Metal:
+        Type: MaterialCategory
+        Properties: [
+            "BaseHardness number 12",
+            "MeasureUnits text kg"
+        ]
+    Stone:
+        Type: MaterialCategory
+        Properties: [
+            "BaseHardness number 10",
+            "MeasureUnits text kg"
+        ]
+    Wood:
+        Type: MaterialCategory
+        Properties: [
+            "BaseHardness number 8",
+            "MeasureUnits text kg"
+        ]
+    Nature:
+        Type: MaterialCategory
+        Properties: [
+            "BaseHardness number 6",
+            "MeasureUnits text kg"
+        ]
+    Leather:
+        Type: MaterialCategory
+        Properties: [
+            "BaseHardness number 4",
+            "MeasureUnits text sqm"
+        ]
+    Cloth:
+        Type: MaterialCategory
+        Properties: [
+            "BaseHardness number 2",
+            "MeasureUnits text sqm"
+        ]

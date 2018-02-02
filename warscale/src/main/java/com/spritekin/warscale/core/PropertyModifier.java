@@ -5,10 +5,10 @@ package com.spritekin.warscale.core;
 //When a relation between parents is created, a relation between childs is also created. That way if a base object or modifier
 // needs to be replaced then the properties can be quickly swapped in the child object as well.
 public class PropertyModifier {
-	private ObjectModifier relation = null;
+	private ObjectMount relation = null;
 	private Property modifier = null;
 	
-	public PropertyModifier(ObjectModifier relation, Property modifier) {
+	public PropertyModifier(ObjectMount relation, Property modifier) {
 		this.relation = relation;
 		this.modifier = modifier;
 	}
@@ -29,15 +29,7 @@ public class PropertyModifier {
 		this.modifier = modifier;
 	}
 
-	public long getUid() {
-		return relation.getUid();
-	}
-
-	public long getTimestamp() {
-		return relation.getTimestamp();
-	}
-
-	public ObjectModifier getRelation() {
+	public ObjectMount getRelation() {
 		return relation;
 	}
 

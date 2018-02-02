@@ -51,8 +51,8 @@ public class Money {
 	public void set(String coins) {
 		clear();
 		while(coins.length() > 0) {
-			String c = com.spritekin.warscale.utils.TestStringUtils.getValueBefore(coins, ",");
-			coins = com.spritekin.warscale.utils.TestStringUtils.getValueAfter(coins, ",");
+			String c = com.spritekin.warscale.utils.StringUtils.getValueBefore(coins, ",");
+			coins = com.spritekin.warscale.utils.StringUtils.getValueAfter(coins, ",");
 			if(isValidMoneyExpr(c))
 				add(c);
 		}		
@@ -90,8 +90,8 @@ public class Money {
 			return;
 
 		while(moneyExpr.length() > 0) {
-			String c = com.spritekin.warscale.utils.TestStringUtils.getValueBefore(moneyExpr, ",");
-			moneyExpr = com.spritekin.warscale.utils.TestStringUtils.getValueAfter(moneyExpr, ",");
+			String c = com.spritekin.warscale.utils.StringUtils.getValueBefore(moneyExpr, ",");
+			moneyExpr = com.spritekin.warscale.utils.StringUtils.getValueAfter(moneyExpr, ",");
 
 			String type = getMoneyExprType(c);
 			Double amt = getMoneyExprValue(c);
@@ -139,8 +139,8 @@ public class Money {
 	//Checks if this is a valid money expression
 	public boolean isValidMoneyExpr(String moneyExpr) {
 		while(moneyExpr.length() > 0) {
-			String c = com.spritekin.warscale.utils.TestStringUtils.getValueBefore(moneyExpr, ",");
-			moneyExpr = com.spritekin.warscale.utils.TestStringUtils.getValueAfter(moneyExpr, ",");
+			String c = com.spritekin.warscale.utils.StringUtils.getValueBefore(moneyExpr, ",");
+			moneyExpr = com.spritekin.warscale.utils.StringUtils.getValueAfter(moneyExpr, ",");
 			//Separate the sections on the expression
 			try {
 				Double value = getMoneyExprValue(c);

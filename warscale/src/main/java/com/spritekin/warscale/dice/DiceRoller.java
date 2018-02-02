@@ -1,6 +1,6 @@
 package com.spritekin.warscale.dice;
 
-import com.spritekin.warscale.utils.TestStringUtils;
+import com.spritekin.warscale.utils.StringUtils;
 import java.util.Random;
 
 public class DiceRoller {
@@ -19,8 +19,8 @@ public class DiceRoller {
 		expr = expr.trim();
 		String res = "";
 		while(expr.length() > 0) {
-			String currentExpr = TestStringUtils.getValueBefore(expr, MULTICONCATENATOR).trim();
-			expr = TestStringUtils.getValueAfter(expr, MULTICONCATENATOR).trim();
+			String currentExpr = StringUtils.getValueBefore(expr, MULTICONCATENATOR).trim();
+			expr = StringUtils.getValueAfter(expr, MULTICONCATENATOR).trim();
 			
 			int val = DiceRoller.rollDiceEx(currentExpr);
 			if(res.length() == 0)
@@ -42,8 +42,8 @@ public class DiceRoller {
 		//Break the expression using + and execute each one
 		int res = 0;
 		while(expr.length() > 0) {
-			String currentExpr = TestStringUtils.getValueBefore(expr, CONCATENATOR).trim();
-			expr = TestStringUtils.getValueAfter(expr, CONCATENATOR).trim();
+			String currentExpr = StringUtils.getValueBefore(expr, CONCATENATOR).trim();
+			expr = StringUtils.getValueAfter(expr, CONCATENATOR).trim();
 			//System.out.println("Evaluating " + currentExpr);
 			if(currentExpr.length() == 0)
 				continue;	//Ignore empty expressions
@@ -84,8 +84,8 @@ public class DiceRoller {
 			return 0;
 
 		//Break and trim
-		String numberExpr = TestStringUtils.getValueBefore(expr, SEPARATOR).trim();
-		String diceExpr = TestStringUtils.getValueAfter(expr, SEPARATOR).trim();
+		String numberExpr = StringUtils.getValueBefore(expr, SEPARATOR).trim();
+		String diceExpr = StringUtils.getValueAfter(expr, SEPARATOR).trim();
 
 		//Try transfoming the dice expression into an integer value, if there is an exception return 0
 		int diceSides = 0;

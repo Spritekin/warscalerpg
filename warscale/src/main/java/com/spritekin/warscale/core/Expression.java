@@ -12,7 +12,7 @@ import java.util.HashMap;
  *
  * The expression does not evaluate itself. It is just a formula. It has no context so the parameters have no meaning.
  * The expression carries a datatype parameter which allows to declare its type. The expression doesn't have a concept of the "type",
- *  the purpose is to declare what the expression means. THis information can be used by expression operators to accept, reject or
+ *  the purpose is to declare what the expression means. This information can be used by expression operators to accept, reject or
  *  do alternate operations on the expressions.
  * For convenience and speed, a expression has a list of variables which are extracted from the expression for easy access, it also
  *  provides methods to replace the variables in the expression and return a cleaner expression. It does not, however, compute the

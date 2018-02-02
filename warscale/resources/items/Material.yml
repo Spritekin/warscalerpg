@@ -1,0 +1,271 @@
+---
+Name: Material
+
+# Used by all classes defined in this file
+Common:
+    Properties: ["MaterialModifier number [MaterialQuality]/5", "MaterialHardness number [MaterialCategory.BaseHardness] + [MaterialModifier]"]
+Class:
+    Agathe:
+        Type: Material
+        Properties: ["MaterialCategory MaterialCategory Gemstone", "MaterialQuality number 5" ]
+    Amethist:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Gemstone", "MaterialQuality number 10" ]
+    Jade:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Gemstone", "MaterialQuality number 15" ]
+    Turquoise:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Gemstone", "MaterialQuality number 20" ]
+    Sapphire:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Gemstone", "MaterialQuality number 25" ]
+    Ruby:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Gemstone", "MaterialQuality number 30" ]
+    Amber:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Gemstone", "MaterialQuality number 35" ]
+    Topaz:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Gemstone", "MaterialQuality number 40" ]
+    Emerald:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Gemstone", "MaterialQuality number 45" ]
+    Obsidian:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Gemstone", "MaterialQuality number 50" ]
+    Diamond:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Gemstone", "MaterialQuality number 55" ]
+    Wurzite:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Gemstone", "MaterialQuality number 60" ]
+    Carbon_nitride:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Gemstone", "MaterialQuality number 70" ]
+    Lonsdaleite:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Gemstone", "MaterialQuality number 80" ]
+    Heterodiamond:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Gemstone", "MaterialQuality number 90" ]
+    Dilithium:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Gemstone", "MaterialQuality number 110" ]
+    Graphene:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Gemstone", "MaterialQuality number 120" ]
+    Copper:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Metal", "MaterialQuality number 0" ]
+    Iron:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Metal", "MaterialQuality number 2" ]
+    Bronze:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Metal", "MaterialQuality number 5" ]
+    Steel:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Metal", "MaterialQuality number 10" ]
+    Silver:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Metal", "MaterialQuality number 15" ]
+    Palladium:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Metal", "MaterialQuality number 20" ]
+    Gold:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Metal", "MaterialQuality number 25" ]
+    Titanium:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Metal", "MaterialQuality number 30" ]
+    Platinum:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Metal", "MaterialQuality number 35" ]
+    Thallium:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Metal", "MaterialQuality number 40" ]
+    Iridium:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Metal", "MaterialQuality number 45" ]
+    Adamantium:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Metal", "MaterialQuality number 50" ]
+    Meteoric:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Metal", "MaterialQuality number 55" ]
+    Luthanum:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Metal", "MaterialQuality number 60" ]
+    Illanium:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Metal", "MaterialQuality number 65" ]
+    Arcanium:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Metal", "MaterialQuality number 70" ]
+    Eonium:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Metal", "MaterialQuality number 80" ]
+    Eternium:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Metal", "MaterialQuality number 90" ]
+    Star:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Metal", "MaterialQuality number 100" ]
+    Pine:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Wood", "MaterialQuality number 5" ]
+    Cedar:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Wood", "MaterialQuality number 10" ]
+    Cypress:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Wood", "MaterialQuality number 15" ]
+    Redwood:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Wood", "MaterialQuality number 20" ]
+    Yew:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Wood", "MaterialQuality number 25" ]
+    Walnut:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Wood", "MaterialQuality number 30" ]
+    Ash:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Wood", "MaterialQuality number 35" ]
+    Bamboo:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Wood", "MaterialQuality number 40" ]
+    Balsa:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Wood", "MaterialQuality number 45" ]
+    Birch:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Wood", "MaterialQuality number 50" ]
+    Oak:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Wood", "MaterialQuality number 55" ]
+    Ebony:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Wood", "MaterialQuality number 60" ]
+    Elm:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Wood", "MaterialQuality number 65" ]
+    Marblewood:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Wood", "MaterialQuality number 70" ]
+    Mahogany:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Wood", "MaterialQuality number 75" ]
+    Kingwood:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Wood", "MaterialQuality number 80" ]
+    Ironwood:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Wood", "MaterialQuality number 85" ]
+    Jute:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Cloth", "MaterialQuality number 5" ]
+    Wool:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Cloth", "MaterialQuality number 10" ]
+    Cotton:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Cloth", "MaterialQuality number 15" ]
+    Flannel:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Cloth", "MaterialQuality number 20" ]
+    Gauze:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Cloth", "MaterialQuality number 25" ]
+    Corduroy:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Cloth", "MaterialQuality number 30" ]
+    Denim:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Cloth", "MaterialQuality number 35" ]
+    Polyester:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Cloth", "MaterialQuality number 40" ]
+    Silk:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Cloth", "MaterialQuality number 45" ]
+    Spandex:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Cloth", "MaterialQuality number 50" ]
+    Kevlar:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Cloth", "MaterialQuality number 55" ]
+    Carbon_fibre:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Cloth", "MaterialQuality number 65" ]
+    Spider_silk:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Cloth", "MaterialQuality number 80" ]
+    Graphene_fibre:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Cloth", "MaterialQuality number 100" ]
+    Sheep:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Leather", "MaterialQuality number 5" ]
+    Cow:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Leather", "MaterialQuality number 8" ]
+    Wolf:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Leather", "MaterialQuality number 10" ]
+    Bear:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Leather", "MaterialQuality number 15" ]
+    Lioness:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Leather", "MaterialQuality number 17" ]
+    Hatchling_dragon:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Leather", "MaterialQuality number 20" ]
+    Badger:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Leather", "MaterialQuality number 25" ]
+    Lion:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Leather", "MaterialQuality number 30" ]
+    Buffalo:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Leather", "MaterialQuality number 35" ]
+    Crocodile:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Leather", "MaterialQuality number 36" ]
+    Young_dragon:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Leather", "MaterialQuality number 40" ]
+    Tiger:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Leather", "MaterialQuality number 45" ]
+    Rhinoceros:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Leather", "MaterialQuality number 47" ]
+    Panther:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Leather", "MaterialQuality number 50" ]
+    Adult_dragon:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Leather", "MaterialQuality number 55" ]
+    Shark:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Leather", "MaterialQuality number 60" ]
+    Giant_whale:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Leather", "MaterialQuality number 65" ]
+    Ancient_dragon:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Leather", "MaterialQuality number 70" ]
+    Leviathan:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Leather", "MaterialQuality number 75" ]
+    Kraken:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Leather", "MaterialQuality number 80" ]
+    Wyrm_dragon:
+        Type: Material
+        Properties: [ "MaterialCategory MaterialCategory Leather", "MaterialQuality number 90" ]

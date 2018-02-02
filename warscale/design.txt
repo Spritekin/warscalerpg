@@ -9,4 +9,108 @@ This includes:
 - Expression - Text string that holds a value declaration, may be on the form of a function.
 - Property - A expression that can be adjusted by other properties.
 - WarscaleObject - All warscale objects inherit from this.
-- Reference - All reference data tables inherit from this.
+- ReferenceTable - Used to load a data table
+
+Warscale objects
+Warscale has 2 levels of objects, very similar to Java classes and instances. All of them use the WarscaleObject class.
+
+Classes
+- A warscale class is a declaration of a concept, for example a material or a race. A Warcale class does declare a latent relation between
+  classes, for example a sword is made of steel, or a Medusa has a Flesh to stone gaze power. However those are just blueprints of objects.
+  So it is possible to build a lot of steel swords from the same class.
+- Classes are kept in the main warscale libraries which contains all the concepts.
+- Relations of objects in the classes are timeless but can be marked with a minimum level which says when it should be applied.
+- No effects are affecting a class. No need to keep track of time or reason for a effect.
+
+Instances
+- A warscale instance is an object that has been initialized from a class. An instance inherits all the properties from its base class.
+- While an object may start with the same values as the blueprint, it may be embedded with specific characteristics and powers that make
+  it quite unique. In a way, an instance is a unique class. It exists because it belongs to the world and must exist in a world.
+- Worlds are unique and while they have a time frame it is not a "continuous" time. It is more like an event based time like a book.
+
+Serialisation
+- A warscale instance can be serialised in order to maintain its state. 
+- A serialised instance keeps the history of all its changes as they level up. For example, a character keeps the history of when it gained levels,
+  which skills were purchased with a level, etc.
+- Only the owner of a character can alter the character. Other users can pick it at a level and use his abilities at that level, but they can't
+  save the character.
+
+,
+  { "Elf": 		[ 
+		"Subtype text Humanoid",
+  		"Description text Elves are a gracious and good looking humanoids with feline features that live and fiercely protect the forest and all the creatures living within their borders. Elves build their cities on deep forests using nature skills to shape the trees without damaging their environment.",
+  		"Size number 2",
+  		"AverageHeightMale number 1.70",
+  		"AverageHeightFemale number 1.60",
+  		"Fire number 2",
+  		"Water number 2",
+  		"Air number 2",
+  		"Life number 2",
+  		"Death number 2",
+  		"Earth number 2",
+  		] },
+  { "Dwarf":		[
+		"Subtype text Humanoid",
+  		"Description text Dwarves are small but hardworking folks, living in caves deep inside the mountains that they protect fiercely against any invader. They are master miners, smiths and engineers with legendary knowledge of the secrets of the stones and metals. They also have exceptional memory and are zealous keepers of history and traditions.",
+  		"Size number 2",
+  		"AverageHeightMale number 1.30",
+  		"AverageHeightFemale number 1.30",
+  		"Fire number 2",
+  		"Water number 2",
+  		"Air number 2",
+  		"Life number 2",
+  		"Death number 2",
+  		"Earth number 2",
+  		] },
+  { "Orc":		[
+		"Subtype text Humanoid",
+  		"Description text Orcs are descendants of humans who would not accept the confinement of civilization. They live in tribal societies where only the strongest prevails. To strangers, orcs are animals, barbarians, harriers, thieves and killers. To friends, they are the fiercest and most loyal allies you can find.",
+  		"Size number 2",
+  		"AverageHeightMale number 2.00",
+  		"AverageHeightFemale number 1.90",
+  		"Fire number 2",
+  		"Water number 2",
+  		"Air number 2",
+  		"Life number 2",
+  		"Death number 2",
+  		"Earth number 2",
+  		] },
+  { "Melraki":	[
+		"Subtype text Humanoid",
+  		"Description text Melrakii are descendants of humans infused with the element of Death. Melrakii value magic and power above anything else.",
+  		"Size number 2",
+  		"AverageHeightMale number 1.60",
+  		"AverageHeightFemale number 1.50",
+  		"Fire number 2",
+  		"Water number 2",
+  		"Air number 2",
+  		"Life number 2",
+  		"Death number 2",
+  		"Earth number 2",
+  		] },
+  { "Sylph":		[
+		"Subtype text Humanoid",
+  		"Description text Sylphs are a race of travellers and explorers. Always wandering, looking for adventures and whatever is there after the next hill or the next forest. If you meet one them open your ears and fasten your purse as they are masterful bards but far better thieves.",
+  		"Size number 2",
+  		"AverageHeightMale number 1.50",
+  		"AverageHeightFemale number 1.40",
+  		"Fire number 2",
+  		"Water number 2",
+  		"Air number 2",
+  		"Life number 2",
+  		"Death number 2",
+  		"Earth number 2",
+  		] },
+  { "Triton":	[
+		"Subtype text Humanoid",
+  		"Description text Tritons are tinkerers, philosophers and rationalists. They attempt to approach every problem in a scientific way. They have a cold analytic mind and maintain calm even in the most desperate situations.",
+  		"Size number 2",
+  		"AverageHeightMale number 1.90",
+  		"AverageHeightFemale number 1.80",
+  		"Fire number 2",
+  		"Water number 2",
+  		"Air number 2",
+  		"Life number 2",
+  		"Death number 2",
+  		"Earth number 2",
+  		] },

@@ -1,13 +1,18 @@
 package com.spritekin.warscale.core;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.yaml.snakeyaml.Yaml;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,7 +33,7 @@ import java.util.logging.Logger;
 public class ReferenceTable {
 	
 	// All ReferenceTable subclasses should initialise with their own specific object types
-	protected java.util.HashMap<String, WarscaleObject> referenceTable = new HashMap<String, WarscaleObject>();
+	protected java.util.Map<String, WarscaleObject> referenceTable = new HashMap<String, WarscaleObject>();
 	protected String name;
 
 	public ReferenceTable(String name) {
@@ -38,7 +43,11 @@ public class ReferenceTable {
 	public String getName() {
 		return name;
 	}
-	
+
+	protected java.util.Set<String> getKeys() {
+		return referenceTable.keySet();
+	}
+
 	public WarscaleObject getObject(String key) {
 		return referenceTable.get(key);
 	}
@@ -130,4 +139,93 @@ public class ReferenceTable {
         // If it fails loading throw an exception
         throw new InvalidWarscaleDataException("ReferenceTable::fromWarscaleData - Failed to load the data file" + filename);
 	}
+	
+	// Load the table from a warscale yaml file
+	public static ReferenceTable fromWarscaleYAML(String filename) {
+        try
+        {
+	    		Yaml yaml = new Yaml();
+	    			
+	    		Map<String, Object> values = (Map<String, Object>) yaml
+	    				.load(new FileInputStream(new File(filename)));
+	
+	            //Fetch the name, this is the reference table name in the library
+	    		String name = (String) values.get("Name");
+            if(name == null)
+            		throw new InvalidWarscaleDataException("ReferenceTable::fromWarscaleYAML - Unable to load the file " + filename + ". Name not specified.");
+            
+            ReferenceTable table = new ReferenceTable(name);
+
+            // Get common attributes. THis are added to all classes defined in this class
+            String[] commonProperties = null ;        
+            Map<String, Object> commons = (Map<String, Object>)values.get("Common");
+            if( commons != null ) {
+    	            	//A warscale common may define a list of properties like
+    	            // Properties:
+    	            //     - "PropertyName type value"
+    	        		//       ...
+    	        		// Other...
+    	            java.util.ArrayList<String> properties = (java.util.ArrayList<String>)commons.get("Properties");
+    	            commonProperties  = new String[properties.size()];
+    	            properties.toArray(commonProperties);
+    	        }
+
+            // Get all classes
+            Map<String, Object> classlist = (Map<String, Object>)values.get("Class");
+            for(String classkey : classlist.keySet()) {
+                Map<String, Object> wsclass = (Map<String, Object>)classlist.get(classkey);
+
+                	//A warscale class is defined as
+                // Type: MaterialCategory
+                // Properties:
+                //     PropertyName: value
+            		//     ...
+                // Powers:
+                //     PowerName: "value"
+                // Skills:
+                //     SkillName: "value"
+            		// Other...
+
+                String type = (String) wsclass.get("Type");
+                    if(type == null)
+                    		throw new InvalidWarscaleDataException("ReferenceTable::fromWarscaleYAML - Unable to load class " + classkey + " on file " + filename + ". Type not specified.");
+
+                java.util.ArrayList<String> properties = (java.util.ArrayList<String>)wsclass.get("Properties");
+                String[] classProperties  = new String[properties.size()];
+                properties.toArray(classProperties);
+
+                String[] allProperties = (String[]) ArrayUtils.addAll(classProperties, commonProperties);
+                
+                table.add(new WarscaleObject(classkey, type, "", "", "", allProperties));
+            }
+
+            return table;
+        }
+        catch(FileNotFoundException fe)
+        {
+            fe.printStackTrace();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        
+        // If it fails loading throw an exception
+        throw new InvalidWarscaleDataException("ReferenceTable::fromWarscaleYAML - Failed to load the data file" + filename);
+	}
+
+	// Merges the contents of the target table into this table. Do not overwrite.
+	public void append(ReferenceTable other) {
+		append(other, false);
+	}
+
+	// Merges the contents of the target table into this table
+	// If overwrite is set, new entries will replace old ones
+	public void append(ReferenceTable other, boolean overwrite) {
+		for(String key: other.getKeys()) {
+			if(!referenceTable.containsKey(key) || overwrite)
+				referenceTable.put(key, other.getObject(key));
+		}
+	}
+	
 }

@@ -16,17 +16,17 @@ public class TestMaterialCategory extends WarscaleTestCase {
 
 		// Test methods
 		assert mc.getName() == MaterialCategory.METAL : "Invalid name: " + MaterialCategory.METAL;
-		assert mc.getBaseHardness() == 12 : "Invalid material hardness: " + 12;
+		assert mc.getPropertyValue(MaterialCategory.BASEHARDNESS).equals("12") : "Invalid material hardness: " + 12;
 
 		// Test properties
-		assert mc.getProperty(MaterialCategory.PROPERTY_NAME).getValue() == MaterialCategory.METAL : "Invalid name: " + MaterialCategory.METAL;
-		assert mc.getBaseHardness() == 12 : "Invalid material hardness: " + 12;
+		assert mc.getProperty(MaterialCategory.NAME).getValue() == MaterialCategory.METAL : "Invalid name: " + MaterialCategory.METAL;
+		assert mc.getPropertyValue(MaterialCategory.BASEHARDNESS).equals("12") : "Invalid material hardness: " + 12;
 
 	}
 
 	public void testMaterialCategoryTable() {
 		System.out.println("TestMaterialCategory::testMaterialCategoryTable");
-		ReferenceTable mct = ReferenceTable.fromWarscaleData("MaterialCategory.wsd");
+		ReferenceTable mct = ReferenceTable.fromWarscaleYAML("resources/items/MaterialCategory.yml");
 
 		// Test direct value access
 		assert mct.getValue(MaterialCategory.METAL, MaterialCategory.BASEHARDNESS).equals("12") : "Invalid material hardness: expected 12, found " + mct.getValue(MaterialCategory.METAL, MaterialCategory.BASEHARDNESS);
@@ -35,7 +35,7 @@ public class TestMaterialCategory extends WarscaleTestCase {
 
 	public void testMaterialCategoryProperty() {
 		System.out.println("TestMaterialCategory::testMaterialCategoryProperty");
-		WarscaleObject parent = new WarscaleObject("Parent Object");
+		WarscaleObject parent = new WarscaleObject("Parent Object", null);
 		MaterialCategoryProperty mcp = (MaterialCategoryProperty)PropertyFactory.newPropertyOfType(MaterialCategory.MATERIALCATEGORY, parent, "TestMaterialCategoryProperty");
 		mcp.setBase(MaterialCategory.METAL);
 		assert mcp.getValue().equals(MaterialCategory.METAL) :
@@ -53,5 +53,5 @@ public class TestMaterialCategory extends WarscaleTestCase {
 			"Invalid value: expected 4, found " + mcp.getValue(MaterialCategory.BASEHARDNESS);
 		
 	}
-
+	
 }

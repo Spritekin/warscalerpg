@@ -1,0 +1,18 @@
+---
+Name: Power
+Class:
+    Fast_learner:
+        Type: Power
+        Properties: [
+            "shared CharacterPointsPerLevel number +1"
+        ]
+    Experienced:
+        Type: Power
+        Properties: [
+            "shared CharacterPoints number +6"
+        ]
+    Increased_Fire:
+        Type: Power
+        Properties: [
+            "shared Fire number +1"
+        ]

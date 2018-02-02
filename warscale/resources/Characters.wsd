@@ -1,0 +1,17 @@
+{
+ "Name" : "Character",
+ "Type" : "Character", 
+ 
+ "Data" : [
+  { "Belgar": {
+  		"Inherits"
+  
+  	  [
+  		"Extends Creature Human",   << This means it will inherit all properties from the human creature
+	  ] 
+  
+  
+  	}
+  }
+ ]
+}

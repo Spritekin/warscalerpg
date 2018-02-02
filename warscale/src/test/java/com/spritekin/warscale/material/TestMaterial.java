@@ -8,29 +8,27 @@ import com.spritekin.warscale.core.WarscaleObject;
 import com.spritekin.warscale.material.Material;
 import com.spritekin.warscale.material.MaterialCategory;
 import com.spritekin.warscale.material.MaterialProperty;
-import com.spritekin.warscale.material.MaterialTable;
 
 public class TestMaterial extends WarscaleTestCase {
 
 	public void testMaterial() {
 		System.out.println("TestMaterial::testMaterial");
-		int testQuality = 25;
+		String testQuality = "25";
 		Material m = new Material("Gold", MaterialCategory.METAL, testQuality);
 		
-		int quality = m.getQuality();
-		int expectedQuality = testQuality;
-		assert quality == expectedQuality :
-			"Invalid quality: expected" + expectedQuality + ", found " + quality;
+		String quality = m.getPropertyValue(Material.MATERIALQUALITY);
+		assert quality.equals(testQuality) :
+			"Invalid quality: expected" + testQuality + ", found " + quality;
 
 		
-		int modifier = m.getModifier();
-		int expectedModifier = testQuality/5;
-		assert modifier == expectedModifier :
-			"Invalid modifier: expected" + expectedModifier + ", found " + modifier;
+		String modifier = ""+m.getPropertyValue(Material.MATERIALMODIFIER);
+		String testModifier = "5"; // = 25 / 5
+		assert modifier.equals(testModifier) :
+			"Invalid modifier: expected" + testModifier + ", found " + modifier;
 		
-		int hardness = m.getHardness();
-		int expectedHardness = Integer.parseInt(Library.getValue(MaterialCategory.MATERIALCATEGORY, MaterialCategory.METAL, MaterialCategory.BASEHARDNESS)) + testQuality / 5;
-		assert hardness == expectedHardness :
+		String hardness = m.getPropertyValue(Material.MATERIALHARDNESS);
+		String expectedHardness = "17"; // = 12 + 5
+		assert hardness.equals(expectedHardness) :
 			"Invalid hardness: expected" + expectedHardness + ", found " + hardness;
 
 		String hard = m.getPropertyValue(MaterialCategory.MATERIALCATEGORY+"."+MaterialCategory.MATERIALUNITS);
@@ -39,18 +37,9 @@ public class TestMaterial extends WarscaleTestCase {
 		
 	}
 	
-	public void testMaterialTable() {
-		System.out.println("TestMaterial::testMaterialTable");
-		MaterialTable mt = new MaterialTable();
-
-		// Test direct value access
-		assert mt.getValue("Gold", Material.MATERIALHARDNESS).equals("17") : "Invalid material hardness: expected 17, found " + mt.getValue("Gold", Material.MATERIALHARDNESS);
-
-	}
-
 	public void testMaterialProperty() {
 		System.out.println("TestMaterial::testMaterialProperty");
-		WarscaleObject parent = new WarscaleObject("Parent");
+		WarscaleObject parent = new WarscaleObject("Parent", null);
 		MaterialProperty mp = (MaterialProperty)PropertyFactory.newPropertyOfType(Material.MATERIAL, parent, "TestMaterialProperty");
 		String matName = "Gold";
 		mp.setBase(matName);
