@@ -30,9 +30,8 @@ public class Creature extends WarscaleObject {
 	public static final String CHARACTERPOINTSUSED = "CharacterPointsUsed"; 	// How many CPs the creature has used
 
 	
-	// A simple contructor. It is not recommended to create a creature using this constructor
+	// A simple constructor. It is not recommended to create a creature using this constructor
 	public Creature(String name) {
-		super(name, CREATURE, "", "", "", null);
-	}
-	
+		super(name, CREATURE, null);
+	}	
 }

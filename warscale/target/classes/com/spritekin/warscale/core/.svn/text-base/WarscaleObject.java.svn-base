@@ -1,0 +1,115 @@
+package com.spritekin.warscale.core;
+
+import java.util.HashMap;
+import java.util.ArrayList;
+
+//A Warscale object is the base class for all the objects in the game, be it a character, an item, a spell, etc
+public class WarscaleObject {
+	//Types
+	public static final String OBJECTTYPE_CREATURE 	= "Creature";
+	public static final String OBJECTTYPE_ITEM  	= "Item";
+	public static final String OBJECTTYPE_SPELL 	= "Spell";
+
+	public static final String ATTRIBUTE_NAME 		= "Name";
+	public static final String ATTRIBUTE_TYPE 		= "Type";
+	public static final String ATTRIBUTE_SUBTYPE	= "Subtype";
+	public static final String ATTRIBUTE_TRAIT 		= "Trait";
+	public static final String ATTRIBUTE_SUBTRAIT 	= "Subtrait";
+	public static final String ATTRIBUTE_DESCRIPTION = "Description";
+	
+	private HashMap<String, Attribute> attributes = new HashMap<String, Attribute>();
+	protected ArrayList<WarscaleObject> modifiers = new ArrayList<WarscaleObject>();
+
+	protected void init(String name, String type, String subtype, String trait, String subtrait) {
+		addAttribute(ATTRIBUTE_NAME, 		Attribute.ATTRIBUTETYPE_TEXT, name);
+		addAttribute(ATTRIBUTE_TYPE, 		Attribute.ATTRIBUTETYPE_TEXT, type);
+		addAttribute(ATTRIBUTE_SUBTYPE, 	Attribute.ATTRIBUTETYPE_TEXT, subtype);
+		addAttribute(ATTRIBUTE_TRAIT, 		Attribute.ATTRIBUTETYPE_TEXT, trait);
+		addAttribute(ATTRIBUTE_SUBTRAIT,	Attribute.ATTRIBUTETYPE_TEXT, subtrait);
+		addAttribute(ATTRIBUTE_DESCRIPTION,	Attribute.ATTRIBUTETYPE_TEXT, "");
+	
+	}
+
+	//Warscale objects have some base methods to get
+	public WarscaleObject(String name) {
+		init(name, "", "", "", "");
+	}
+
+	protected WarscaleObject(String name, String type, String subtype, String trait, String subtrait) {		
+		init(name, type, subtype, trait, subtrait);
+	}
+	
+	public ArrayList<? extends WarscaleObject> getModifiers() {
+		return modifiers;
+	}
+
+
+	protected void setModifiers(ArrayList<WarscaleObject> modifiers) {
+		this.modifiers = modifiers;
+	}
+
+	public HashMap<String, Attribute> getAttributes() {
+		return attributes;
+	}
+
+	protected void addAttribute(String attributeName, String type, String value) {
+		if(!getAttributes().containsKey(attributeName)) {
+			Attribute att = Attribute.newAttributeOfType(this, type, attributeName);
+			att.setBase(value);
+			getAttributes().put(attributeName, att);
+		}
+	}
+	
+	public void setAttribute(String attributeName, String value) {
+		if(!getAttributes().containsKey(attributeName)) {
+			return;
+		}
+		
+		Attribute att = getAttributes().get(attributeName);
+		att.setBase(value);
+		
+	}
+
+	public Attribute getAttribute(String attributeName) {
+		if(!getAttributes().containsKey(attributeName)) {
+			return null;
+		}
+
+		return getAttributes().get(attributeName);
+	}
+
+	//Adds this modifier to the modifier list
+	// then goes through all the attributes in the modifier and adds them to the attributes of the main object
+	public void addModifier(WarscaleObject modifier) {
+		if(this.getClass() != modifier.getClass()) {	//Both need to be of the same class
+			System.out.println("WarscaleObject::addModifier - Unable to apply the modifier " + modifier.getAttribute(ATTRIBUTE_NAME) + 
+					" to the object " + getAttribute(ATTRIBUTE_NAME) + " as they belong to different classes.");
+		}
+		
+		modifiers.add(modifier);
+		
+		//Name and type is never modified
+		for(String attName : getAttributes().keySet()) {
+			if(attName.equals(ATTRIBUTE_NAME) || attName.equals(ATTRIBUTE_TYPE))
+				continue;
+			
+			getAttribute(attName).addModifier(modifier.getAttribute(attName).getBase());			
+			/*
+			setDr(modify(DESCRIPTORTYPE_NUMBER, getDr(), m.getDr())); 
+			setPrice(modify(DESCRIPTORTYPE_MONEY, getPrice(), m.getPrice())); 
+			setHands(modify(DESCRIPTORTYPE_NUMBER, getHands(), m.getHands())); 
+			setReach(modify(DESCRIPTORTYPE_NUMBER, getReach(), m.getReach())); 
+			setRange(modify(DESCRIPTORTYPE_NUMBER, getRange(), m.getRange())); 
+			setAttack(modify(DESCRIPTORTYPE_NUMBER, getAttack(), m.getAttack())); 
+			setDmgType(modify(DESCRIPTORTYPE_DAMAGETYPE, getDmgType(), m.getDmgType())); 
+			setParry(modify(DESCRIPTORTYPE_NUMBER, getParry(), m.getParry())); 
+			setAP(modify(DESCRIPTORTYPE_NUMBER, getAP(), m.getAP())); 
+			setMaterial(modify(DESCRIPTORTYPE_MATERIALCATEGORY, getMaterial(), m.getMaterial())); 
+			setWeight(modify(DESCRIPTORTYPE_NUMBER, getWeight(), m.getWeight())); 
+			setSize(modify(DESCRIPTORTYPE_NUMBER, getSize(), m.getSize())); 		
+			*/
+		}
+		
+	}
+
+}

@@ -33,7 +33,7 @@ public class MaterialCategory extends WarscaleObject {
 
 	// Material category object
 	public MaterialCategory(String name, int hardness, String units) {
-		super(name, MATERIALCATEGORY, "", "", "", null);
+		super(name, MATERIALCATEGORY);
 		addProperty(BASEHARDNESS, 	DataType.NUMBER, ""+hardness);
 		addProperty(MATERIALUNITS, 	DataType.TEXT, units);
 	}	

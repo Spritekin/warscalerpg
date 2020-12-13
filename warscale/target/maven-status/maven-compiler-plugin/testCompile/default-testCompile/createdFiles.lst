@@ -1,0 +1,13 @@
+com/spritekin/warscape/skills/TestPower.class
+com/spritekin/warscale/power/TestPower.class
+com/spritekin/warscale/core/TestProperty.class
+com/spritekin/warscale/item/TestItem.class
+com/spritekin/warscale/core/ExpressionTest.class
+com/spritekin/warscale/material/TestMaterialCategory.class
+com/spritekin/warscale/core/TestLibrary.class
+com/spritekin/warscale/AppTest.class
+com/spritekin/warscale/utils/TestStringUtils.class
+com/spritekin/warscale/WarscaleTestCase.class
+com/spritekin/warscale/equipment/weapon/TestWeapon.class
+com/spritekin/warscale/material/TestMaterial.class
+com/spritekin/warscale/core/TestWarscaleObject.class

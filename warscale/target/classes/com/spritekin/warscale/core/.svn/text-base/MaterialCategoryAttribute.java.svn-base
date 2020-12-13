@@ -1,0 +1,63 @@
+package com.spritekin.warscale.core;
+
+import com.spritekin.warscale.core.Expression;
+import com.spritekin.warscale.material.MaterialCategory;
+
+import java.util.HashMap;
+
+//A material category attribute treats the values as text. It will try to keep the highest material category
+// The values expressions can have the following prefixes
+// ==       : The value is set to this text regardless of any past operations
+
+public class MaterialCategoryAttribute extends Attribute {	
+
+	public MaterialCategoryAttribute(WarscaleObject parent, String name) {
+		super(parent, name);
+		setType(ATTRIBUTETYPE_MATERIALCATEGORY);
+	}
+	
+	public void recomputeAttributeTotal() {
+		//Replace and evaluate base res
+		HashMap<String, String> vars = base.getVariableList();
+		vars = gatherVariableData(vars);
+		String res = base.evaluate(vars);
+
+		//If the base has no valid material category ignore
+		MaterialCategory mcBase = MaterialCategory.get(res);
+		if(mcBase == null) {
+			setResult(res);
+			return;			
+		}
+
+		//Apply the modifiers
+		for(Expression mod : getModifiers()) {
+			if(mod.isEmpty())
+				continue;
+
+			vars = mod.getVariableList();
+			vars = gatherVariableData(vars);
+			String modResult = mod.evaluate(vars);
+
+			if(mod.isEmpty())
+				continue;
+
+			if(modResult.startsWith("==")) {
+				MaterialCategory mc = MaterialCategory.get(modResult.substring(2));
+				if(mc == null)
+					continue;	//Ignore invalid materials				
+				res = modResult.substring(2);
+			}
+			else {
+				MaterialCategory mc = MaterialCategory.get(modResult);
+				if(mc == null)
+					continue;	//Ignore invalid materials				
+				mcBase = MaterialCategory.get(res);
+				if(mc.isHarderThan(mcBase))
+					res = modResult;
+			}
+		}
+
+		setResult(res);
+	}
+	
+}

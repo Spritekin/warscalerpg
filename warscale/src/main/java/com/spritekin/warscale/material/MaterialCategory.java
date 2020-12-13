@@ -1,6 +1,8 @@
 package com.spritekin.warscale.material;
 
 import com.spritekin.warscale.core.DataType;
+import com.spritekin.warscale.core.Library;
+import com.spritekin.warscale.core.ReferenceTable;
 import com.spritekin.warscale.core.WarscaleObject;
 
 /* The MaterialCategory class is more a kind of interface on top of a warscale object allowing to 
@@ -33,8 +35,19 @@ public class MaterialCategory extends WarscaleObject {
 
 	// Material category object
 	public MaterialCategory(String name, int hardness, String units) {
-		super(name, MATERIALCATEGORY, "", "", "", null);
+		super(name, MATERIALCATEGORY);
 		addProperty(BASEHARDNESS, 	DataType.NUMBER, ""+hardness);
 		addProperty(MATERIALUNITS, 	DataType.TEXT, units);
-	}	
+	}
+	
+	// Generate a table with all the available material categories
+	public static void generateTable(ReferenceTable table) throws RuntimeException {
+		table.add(new MaterialCategory(FABRIC, 	2, SQM));
+		table.add(new MaterialCategory(LEATHER, 	4, SQM));
+		table.add(new MaterialCategory(NATURE, 	6, KG));
+		table.add(new MaterialCategory(WOOD, 	8, KG));
+		table.add(new MaterialCategory(STONE, 	10, KG));
+		table.add(new MaterialCategory(METAL, 	12, KG));
+		table.add(new MaterialCategory(GEMSTONE, 14, CT));		
+	}
 }

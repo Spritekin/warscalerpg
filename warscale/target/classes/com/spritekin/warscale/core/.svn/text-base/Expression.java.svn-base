@@ -1,0 +1,79 @@
+package com.spritekin.warscale.core;
+
+import java.util.HashMap;
+/*
+All values in Warscale are expressions. 
+Expressions are a javascript formula that may be evaluated. 
+A formula can be a simple value (i.e. 0) or a string (i.e. "Hello world") or a parametrized definition like [Fire]*2
+The value doesn't contains a data type
+If the formula can't be evaluated, the result value is empty.
+*/
+public class Expression {
+
+	private String expression = "";
+	private HashMap<String, String> variables = new HashMap<String, String>();
+
+	public Expression() {
+	}
+
+	public Expression(String s) {
+		setExpression(s);
+	}
+	
+	public String getExpression() {
+		return expression;
+	}
+
+	//Sets the expression and extracts the parameters
+	public void setExpression(String expression) {
+		this.expression = expression;
+		variables = com.spritekin.utils.StringUtils.getVariables(this.expression);
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((expression == null) ? 0 : expression.hashCode());
+		return result;
+	}
+
+	//The equals method only cares if it is the same object.
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		return false;
+	}	
+	
+	public boolean isEmpty() {
+		return expression == null || expression.length() == 0 || expression.equals("-");		
+	}
+
+	//This method will return a hashmap with the required parameter list
+	//This is a copy of the original list so the original is preserved. Entries are null.
+	// The parameter list should be filled by the caller and used for the evaluate function
+	public HashMap<String, String> getVariableList() {
+		HashMap<String, String> res = new HashMap<String, String>();
+		for(String key : variables.keySet())
+			res.put(key, null);
+		return res;
+	}
+	
+	//Resolves the value of a expression given the parameters. 
+	//If a parameter is not in the list, the expression is processed as much as possible
+	// given the available parameters
+	//Resolves the value of a expression given the parameters. 
+	//If a parameter is not in the list, the expression is processed as much as possible
+	// given the available parameters
+	public String evaluate(HashMap<String, String> vars) {
+		String exp = getExpression();
+		
+		//Go on and replace all possible parameters
+		exp = com.spritekin.utils.StringUtils.replaceVariables(exp, vars);
+		
+		//In a text expression, just return the remaining expression
+		return exp;		
+	}
+
+}

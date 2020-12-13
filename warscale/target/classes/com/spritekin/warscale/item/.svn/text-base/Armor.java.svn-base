@@ -1,0 +1,15 @@
+package com.spritekin.warscale.item;
+
+import java.util.ArrayList;
+
+public class Armor extends Item {
+
+	protected Armor(String name, String trait, String subtrait,
+			String dr, String price, String material, String weight) {
+		super(name, ITEMSUBTYPE_ARMOR, trait, subtrait, dr, price, material, weight);
+		
+		//modifiers = new ArrayList<Armor>();
+
+	}
+
+}

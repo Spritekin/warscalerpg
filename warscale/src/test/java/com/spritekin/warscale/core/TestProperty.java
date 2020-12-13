@@ -12,9 +12,9 @@ public class TestProperty extends WarscaleTestCase {
 
 	public static void testSetPropertyBase() {
 		//Testing properties	
-		System.out.println("TestProperty::testTextAttribute");
-		WarscaleObject wo = new WarscaleObject("Dummy Object", null);
-		wo.setProperty(WarscaleObject.TYPE, "Dummy type");
+		System.out.println("TestProperty::testSetPropertyBase");
+		WarscaleObject wo = new WarscaleObject("Dummy Object")
+			.setProperty(WarscaleObject.TYPE, "Dummy type");
 
 		// Create three properties with the same name
 		TextProperty na = new TextProperty(wo, "TextAttribute");
@@ -25,8 +25,8 @@ public class TestProperty extends WarscaleTestCase {
 		
 	public static void testPropertyAddition() {
 		//Testing properties	
-		System.out.println("TestProperty::testTextAttribute");
-		WarscaleObject wo = new WarscaleObject("Dummy Object", "Dummy type", "", "", "", null);
+		System.out.println("TestProperty::testPropertyAddition");
+		WarscaleObject wo = new WarscaleObject("Dummy Object", "Dummy type", null);
 
 		// Create three properties with the same name
 		TextProperty na = new TextProperty(wo, "TextAttribute");
@@ -70,7 +70,7 @@ public class TestProperty extends WarscaleTestCase {
 	
 	public static void testNumberProperty() {
 		System.out.println("TestProperty::testNumberProperty");
-		WarscaleObject parent = new WarscaleObject("Parent Object", null);
+		WarscaleObject parent = new WarscaleObject("Parent Object");
 		NumberProperty number = (NumberProperty)PropertyFactory.newPropertyOfType(DataType.NUMBER, parent, "TestNumberProperty");
 		number.setBase("1");
 		assert number.getValue().equals("1") : "Invalid value: expected 1, found" + number.getValue();

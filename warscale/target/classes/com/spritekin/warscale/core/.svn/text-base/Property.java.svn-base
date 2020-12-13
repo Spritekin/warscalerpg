@@ -1,0 +1,121 @@
+package com.spritekin.warscale.core;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+//grodriguez
+//An attribute is a collection of values. Each time a value is added or removed the total is recomputed by operating all the value expressions
+// When the attribute is created a type is assigned so that the subclass knows how to operate the attributes.
+// The attribute always has a base value which is the start of the operation, after that, all the other values are multiplied against this one.
+//The attributes define a parent object. If a parameter is required to be computed then the attributes of the parent are searched first,
+// then the encounter variables, then the global variables. If the parameter can't be replaced then all the expression is unresolvable and returns empty
+public abstract class Attribute {
+
+	public static final String ATTRIBUTETYPE_NUMBER = "number";
+	public static final String ATTRIBUTETYPE_TEXT = "text";
+	public static final String ATTRIBUTETYPE_MONEY = "money";
+	public static final String ATTRIBUTETYPE_MATERIALCATEGORY = "matcat";
+	public static final String ATTRIBUTETYPE_DAMAGETYPE = "dmgtype";
+
+	protected WarscaleObject parent = null;
+	protected String type = "";
+	protected String name = "";
+	protected Expression base = null;
+	protected ArrayList<Expression> modifiers = new ArrayList<Expression>();
+	protected String result = null;
+
+	public Attribute(WarscaleObject parent, String name) {
+		setName(name);
+		setParent(parent);
+	}
+
+	public WarscaleObject getParent() {
+		return parent;
+	}
+
+	private void setParent(WarscaleObject parent) {
+		this.parent = parent;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	protected void setType(String type) {
+		this.type = type;
+	}
+
+	public String getResult() {
+		return result;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	private void setName(String name) {
+		this.name = name;
+	}
+
+	protected Expression getBase() {
+		return base;
+	}
+
+	public void setBase(String base) {
+		this.base = new Expression(base);
+		recomputeAttributeTotal();
+	}
+
+	protected void setResult(String result) {
+		this.result = result;		
+	}
+
+	public ArrayList<? extends Expression> getModifiers() {
+		return modifiers;
+	}
+
+	public static Attribute newAttributeOfType(WarscaleObject parent, String valueType, String name) {
+		if(valueType.equals(ATTRIBUTETYPE_NUMBER))
+			return new NumberAttribute(parent, name);
+		if(valueType.equals(ATTRIBUTETYPE_TEXT))
+			return new TextAttribute(parent, name);
+		if(valueType.equals(ATTRIBUTETYPE_MONEY))
+			return new MoneyAttribute(parent, name);
+		if(valueType.equals(ATTRIBUTETYPE_MATERIALCATEGORY))
+			return new MaterialCategoryAttribute(parent, name);
+		if(valueType.equals(ATTRIBUTETYPE_DAMAGETYPE))
+			return new DamageTypeAttribute(parent, name);
+		return null;
+	}
+
+	//Adds a modifier to the list of modifiers of this attribute
+	public void addModifier(String value) {
+		addModifier(new Expression(value));
+	}
+	
+	public void addModifier(Expression value) {
+		if(value == null || value.getExpression() == null) {
+			System.out.println("Attribute::addModifier - Improper value 'null' added to attribute " + getName());
+			return;
+		}
+		if(value.getExpression().length() == 0) {
+			//System.out.println("Attribute::addModifier - Empty modifier ignored for attribute " + getName());
+			return;
+		}
+
+		modifiers.add(value);
+		recomputeAttributeTotal();
+	}
+
+	protected abstract void recomputeAttributeTotal();
+	
+	protected HashMap<String, String> gatherVariableData(HashMap<String, String> vars) {
+		//Fill in from parent attributes
+		for(String key:vars.keySet()) {
+			if( getParent() != null ) {
+				vars.put(key, parent.getAttribute(key).getResult());
+			}
+		}
+		return vars;
+	}
+}

@@ -2,14 +2,14 @@ package com.spritekin.warscale.item.weapon;
 
 import java.util.HashMap;
 
-import com.spritekin.utils.StringUtils;
+import com.spritekin.warscale.utils.StringUtils;
 import com.spritekin.warscale.core.Property;
 import com.spritekin.warscale.currency.Money;
 import com.spritekin.warscale.item.Item;
 import com.spritekin.warscale.material.Material;
 import com.spritekin.warscale.material.MaterialCategory;
 
-public class Weapon extends Item {
+public class Weapon {
 
 	public static final String PROPERTY_HANDS 		= "Hands";
 	public static final String PROPERTY_REACH 		= "Reach";
@@ -175,7 +175,7 @@ public class Weapon extends Item {
 
 	//A list with the current weapon modifiers and how many
 	private HashMap<String, Integer> modifierList = new HashMap<String, Integer>();
-	
+	/*
 	public Weapon(String name, String trait, String subtrait, String dr, String hands,
 			String reach, String range, String attack, String dmgType,
 			String parry, String ap, Material material, String weight, String size, String nAttacks, String chamberCap) {
@@ -397,7 +397,7 @@ public class Weapon extends Item {
 				"\t" + w + 
 				"\t" + s;
 	}
-
+*/
 }
 
 

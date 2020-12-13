@@ -39,7 +39,7 @@ public class TestMaterial extends WarscaleTestCase {
 	
 	public void testMaterialProperty() {
 		System.out.println("TestMaterial::testMaterialProperty");
-		WarscaleObject parent = new WarscaleObject("Parent", null);
+		WarscaleObject parent = new WarscaleObject("Parent");
 		MaterialProperty mp = (MaterialProperty)PropertyFactory.newPropertyOfType(Material.MATERIAL, parent, "TestMaterialProperty");
 		String matName = "Gold";
 		mp.setBase(matName);

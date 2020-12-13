@@ -1,0 +1,38 @@
+package com.spritekin.warscale.core;
+
+import com.spritekin.warscale.core.Expression;
+import java.util.HashMap;
+
+//A text attribute treats the values as text. It will try to concatenate the values
+// The values expressions can have the following prefixes
+// ==       : The value is set to this text regardless of any past operations
+
+public class TextAttribute extends Attribute {	
+
+	public TextAttribute(WarscaleObject parent, String name) {
+		super(parent, name);
+		setType(ATTRIBUTETYPE_TEXT);
+	}
+	
+	public void recomputeAttributeTotal() {
+		HashMap<String, String> vars = base.getVariableList();
+		vars = gatherVariableData(vars);
+		String res = base.evaluate(vars);
+		
+		for(Expression mod : getModifiers()) {
+			if(mod.isEmpty())
+				continue;
+
+			vars = mod.getVariableList();
+			vars = gatherVariableData(vars);
+			String modResult = mod.evaluate(vars);
+			
+			if(modResult.startsWith("=="))
+				res = modResult.substring(2);
+			else
+				res = res + modResult;
+		}
+		setResult(res);
+	}
+	
+}

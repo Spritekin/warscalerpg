@@ -1,0 +1,674 @@
+package com.spritekin.warscale.item.weapon;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
+import com.spritekin.utils.StringUtils;
+import com.spritekin.warscale.core.Attribute;
+import com.spritekin.warscale.core.Expression;
+import com.spritekin.warscale.item.Item;
+
+public class Weapon extends Item {
+
+	public static final String ATTRIBUTE_HANDS 		= "Hands";
+	public static final String ATTRIBUTE_REACH 		= "Reach";
+	public static final String ATTRIBUTE_RANGE 		= "Range";
+	public static final String ATTRIBUTE_ATTACK 	= "Attack";
+	public static final String ATTRIBUTE_DMGTYPE 	= "DmgType";
+	public static final String ATTRIBUTE_PARRY 		= "Parry";
+	public static final String ATTRIBUTE_AP 		= "AP";
+	public static final String ATTRIBUTE_SIZE 		= "Size";
+	public static final String ATTRIBUTE_NATTACKS 	= "#Att";
+	public static final String ATTRIBUTE_CHAMBERCAP = "Cap";
+
+	public static String WEAPONSUBTRAIT_MELEE = 	"Melee";
+	public static String WEAPONSUBTRAIT_RANGED = 	"Ranged";
+	public static String WEAPONSUBTRAIT_GENERIC = 	"Generic";
+		
+	public static String WEAPONTRAIT_AXE = 		"Axe";
+	public static String WEAPONTRAIT_BLUNT = 	"Blunt";
+	public static String WEAPONTRAIT_FLEXIBLE = "Flexible";
+	public static String WEAPONTRAIT_GAUNTLET = "Gauntlet";
+	public static String WEAPONTRAIT_KNIFE = 	"Knife";
+	public static String WEAPONTRAIT_SWORD = 	"Sword";
+	public static String WEAPONTRAIT_POLEARM = 	"Polearm";
+
+	public static String WEAPONTRAIT_BOW = 		"Bow";
+	public static String WEAPONTRAIT_ARROW = 	"Arrow";
+	public static String WEAPONTRAIT_CROSSBOW = "Crossbow";
+	public static String WEAPONTRAIT_BOLT = 	"Bolt";
+	public static String WEAPONTRAIT_PISTOL = 	"Pistol";
+	public static String WEAPONTRAIT_RIFLE = 	"Rifle";
+	public static String WEAPONTRAIT_BULLET = 	"Bullet";
+
+	public static String WEAPONTRAIT_SHIELD = "Shield";
+
+	
+	//Definitions of base axes and modifiers
+	private static HashMap<String, HashMap<String, Integer>> allowedModifiers = new HashMap<String, HashMap<String, Integer>>();
+
+	//Definitions of templates
+	private static HashMap <String, String> templateBase = new HashMap<String, String>();
+	private static HashMap <String, String> templateModifiers = new HashMap<String, String>();
+
+	private static void addWeaponTemplate(String name, String base, String modifiers) {		
+		templateBase.put(name, base);
+		templateModifiers.put(name, modifiers);
+	}
+	
+	static {
+		
+		//Axes
+		allowedModifiers.put(WEAPONTRAIT_AXE, new HashMap<String, Integer>());
+		allowedModifiers.get(WEAPONTRAIT_AXE).put("Double", 1);
+		allowedModifiers.get(WEAPONTRAIT_AXE).put("Gemstone", 3);
+		allowedModifiers.get(WEAPONTRAIT_AXE).put("Light", 1);
+		allowedModifiers.get(WEAPONTRAIT_AXE).put("Long shaft", 3);
+		allowedModifiers.get(WEAPONTRAIT_AXE).put("Pick", 2);
+		allowedModifiers.get(WEAPONTRAIT_AXE).put("Throwing", 1);
+		allowedModifiers.get(WEAPONTRAIT_AXE).put("War", 1);
+
+		addWeaponTemplate("Hand Axe",		"Hand Axe", 	"");
+		addWeaponTemplate("Medium Axe",		"Medium Axe", 	"");
+		addWeaponTemplate("Broad Axe", 		"Broad Axe", 	"");
+		addWeaponTemplate("Pick", 			"Hand Axe", 	"Pick");
+		addWeaponTemplate("Pick Axe", 		"Medium Axe", 	"Double;Pick");
+		addWeaponTemplate("Military Pick", 	"Broad Axe", 	"Double;Pick;Pick;War");
+		addWeaponTemplate("Double Axe", 	"Broad Axe", 	"Double");
+		addWeaponTemplate("Battle Axe", 	"Medium Axe", 	"Double;Pick;War");
+		addWeaponTemplate("War Axe", 		"Broad Axe", 	"Double;War");
+		addWeaponTemplate("Tomahawk", 		"Hand Axe", 	"Throwing");
+		addWeaponTemplate("Francisca", 		"Medium Axe", 	"Throwing");
+		addWeaponTemplate("Hurlbat", 		"Medium Axe", 	"Double;War;Throwing");
+
+		addWeaponTemplate("Poleaxe", 		"Medium Axe", 	"Double;Pick;Long shaft");
+
+		//Blunt
+		allowedModifiers.put(WEAPONTRAIT_BLUNT, new HashMap<String, Integer>());
+		allowedModifiers.get(WEAPONTRAIT_BLUNT).put("Gemstone", 3);
+		allowedModifiers.get(WEAPONTRAIT_BLUNT).put("Light", 1);
+		allowedModifiers.get(WEAPONTRAIT_BLUNT).put("Long shaft", 3);
+		allowedModifiers.get(WEAPONTRAIT_BLUNT).put("Pick", 2);
+		allowedModifiers.get(WEAPONTRAIT_BLUNT).put("Spiked", 1);
+		allowedModifiers.get(WEAPONTRAIT_BLUNT).put("War", 1);
+		
+		addWeaponTemplate("Club",			"Club", 		"");
+		addWeaponTemplate("Hammer", 		"Hammer", 		"");
+		addWeaponTemplate("Mace", 			"Mace", 		"");
+		addWeaponTemplate("Warhammer", 		"Hammer", 		"War");
+		addWeaponTemplate("Flanged mace", 	"Mace", 		"War");
+		addWeaponTemplate("Spiked club", 	"Club", 		"Spiked");
+		addWeaponTemplate("Spiked mace", 	"Mace", 		"Spiked");
+
+		addWeaponTemplate("Morning star", 	"Mace", 		"Spiked;Long shaft");
+		addWeaponTemplate("Bec de corbin", 	"Hammer", 		"Pick;Long shaft;Long shaft");
+
+		//Flexible
+		allowedModifiers.put(WEAPONTRAIT_FLEXIBLE, new HashMap<String, Integer>());
+		allowedModifiers.get(WEAPONTRAIT_FLEXIBLE).put("Additional lash", 4);
+		allowedModifiers.get(WEAPONTRAIT_FLEXIBLE).put("Ball", 1);
+		allowedModifiers.get(WEAPONTRAIT_FLEXIBLE).put("Bladed", 1);
+		allowedModifiers.get(WEAPONTRAIT_FLEXIBLE).put("Claw", 1);
+		allowedModifiers.get(WEAPONTRAIT_FLEXIBLE).put("Gemstone", 3);
+		allowedModifiers.get(WEAPONTRAIT_FLEXIBLE).put("Hook", 1);
+		allowedModifiers.get(WEAPONTRAIT_FLEXIBLE).put("Long lash", 1);		
+		allowedModifiers.get(WEAPONTRAIT_FLEXIBLE).put("Spiked", 1);
+		allowedModifiers.get(WEAPONTRAIT_FLEXIBLE).put("Three section", 1);
+		allowedModifiers.get(WEAPONTRAIT_FLEXIBLE).put("Throwing", 1);
+		allowedModifiers.get(WEAPONTRAIT_FLEXIBLE).put("Weighted", 1);
+		allowedModifiers.get(WEAPONTRAIT_FLEXIBLE).put("War", 1);
+		
+		addWeaponTemplate("Chain",			"Chain", 		"");
+		addWeaponTemplate("Rope",			"Rope", 		"");
+		addWeaponTemplate("Short flail", 	"Short flail", 	"");
+		addWeaponTemplate("Whip", 			"Whip",			"");
+		addWeaponTemplate("Nunchaku", 		"Short flail",	"");		
+		addWeaponTemplate("Bolas", 			"Rope", 		"Ball;Throwing");
+		addWeaponTemplate("Meteor hammer", 	"Chain", 		"Additional lash;Ball");
+		addWeaponTemplate("Three section staff", "Short flail", "Three section");
+		addWeaponTemplate("Military flail", "Chain", 		"Ball;War");
+		addWeaponTemplate("Kusarigama", 	"Chain", 		"Long lash;Bladed;Ball");
+		addWeaponTemplate("Spiked chain", 	"Chain", 		"Spiked");
+		addWeaponTemplate("Bullwhip", 		"Whip", 		"Long lash");
+		addWeaponTemplate("Flying claw", 	"Rope", 		"Claw");
+		addWeaponTemplate("Dragon claw", 	"Chain", 		"War;Claw");
+		addWeaponTemplate("Flying hook", 	"Rope", 		"Long lash;Hook");
+		addWeaponTemplate("Scourge(5)", 	"Whip", 		"Additional lash;Additional lash;Additional lash;Additional lash");
+
+		//Gauntlet
+		allowedModifiers.put(WEAPONTRAIT_GAUNTLET, new HashMap<String, Integer>());
+		allowedModifiers.get(WEAPONTRAIT_GAUNTLET).put("Claw", 3);
+		allowedModifiers.get(WEAPONTRAIT_GAUNTLET).put("Dagger", 3);
+		allowedModifiers.get(WEAPONTRAIT_GAUNTLET).put("Gemstone", 3);
+		allowedModifiers.get(WEAPONTRAIT_GAUNTLET).put("Locking", 1);
+		allowedModifiers.get(WEAPONTRAIT_GAUNTLET).put("Padded", 1);
+		allowedModifiers.get(WEAPONTRAIT_GAUNTLET).put("Retractile", 1);
+		allowedModifiers.get(WEAPONTRAIT_GAUNTLET).put("Spiked", 1);
+		allowedModifiers.get(WEAPONTRAIT_GAUNTLET).put("War", 1);
+		
+		addWeaponTemplate("Soft Glove",		"Soft Glove", 	"");
+		addWeaponTemplate("Hard Glove",		"Hard Glove", 	"");
+		addWeaponTemplate("Metal Glove",	"Metal Glove", 	"");
+		addWeaponTemplate("Knuckles", 		"Knuckles", 	"");
+		addWeaponTemplate("Boxing Gloves", 	"Soft Glove", 	"Padded");
+		addWeaponTemplate("Cestus", 		"Hard Glove", 	"Spiked");
+		addWeaponTemplate("Locking Glove",	"Metal Glove", 	"Locking");
+		addWeaponTemplate("Pata", 			"Metal Glove", 	"Dagger");
+		addWeaponTemplate("Tiger Claws", 	"Knuckles", 	"Claw");
+		addWeaponTemplate("War Gauntlet", 	"Metal Glove", 	"War;Spiked");
+
+		//Knifes
+		allowedModifiers.put(WEAPONTRAIT_KNIFE, new HashMap<String, Integer>());
+		allowedModifiers.get(WEAPONTRAIT_KNIFE).put("Foil", 1);
+		allowedModifiers.get(WEAPONTRAIT_KNIFE).put("Gemstone", 3);
+		allowedModifiers.get(WEAPONTRAIT_KNIFE).put("Handguard", 1);
+		allowedModifiers.get(WEAPONTRAIT_KNIFE).put("Weaponcatch", 1);
+		allowedModifiers.get(WEAPONTRAIT_KNIFE).put("Long blade", 1);
+		allowedModifiers.get(WEAPONTRAIT_KNIFE).put("Throwing", 1);
+		allowedModifiers.get(WEAPONTRAIT_KNIFE).put("War", 1);
+		allowedModifiers.get(WEAPONTRAIT_KNIFE).put("Light", 1);
+		allowedModifiers.get(WEAPONTRAIT_KNIFE).put("Long shaft", 3);
+
+		addWeaponTemplate("Dagger",			"Dagger", 	"");
+		addWeaponTemplate("Knife",			"Knife", 	"");
+		addWeaponTemplate("Sickle", 		"Sickle", 	"");
+		addWeaponTemplate("Sai", 			"Dagger", 	"Foil;Weaponcatch");
+		addWeaponTemplate("Wakisashi", 		"Knife", 	"Long blade;War;Light");
+		addWeaponTemplate("Tanto", 			"Knife", 	"War;Light");
+		addWeaponTemplate("Throwing dagger","Dagger", 	"Throwing");
+		addWeaponTemplate("Dart",			"Dagger", 	"Light;Foil;Throwing");
+		addWeaponTemplate("Shuriken",		"Knife", 	"Light;Throwing");
+		addWeaponTemplate("Cutlass",		"Dagger", 	"War;Long blade;Handguard");
+		addWeaponTemplate("Machete",		"Knife", 	"War;Long blade");
+
+		addWeaponTemplate("Javelin",		"Dagger", 	"Foil;Throwing;Long shaft");
+		addWeaponTemplate("Short spear",	"Dagger", 	"Long shaft");
+		addWeaponTemplate("Spear",			"Dagger", 	"Long shaft;Long shaft");
+		addWeaponTemplate("Spetum",			"Dagger", 	"Foil;Long blade;Long shaft");
+		addWeaponTemplate("Lance",			"Dagger", 	"War;Long shaft;Long shaft");
+
+		//Sword
+		allowedModifiers.put(WEAPONTRAIT_SWORD, new HashMap<String, Integer>());
+		allowedModifiers.get(WEAPONTRAIT_SWORD).put("Foil", 1);
+		allowedModifiers.get(WEAPONTRAIT_SWORD).put("Gemstone", 3);
+		allowedModifiers.get(WEAPONTRAIT_SWORD).put("Light", 1);
+		allowedModifiers.get(WEAPONTRAIT_SWORD).put("Long blade", 2);
+		allowedModifiers.get(WEAPONTRAIT_SWORD).put("Long shaft", 3);
+		allowedModifiers.get(WEAPONTRAIT_SWORD).put("Handguard", 1);
+		allowedModifiers.get(WEAPONTRAIT_SWORD).put("Weaponcatch", 1);
+		allowedModifiers.get(WEAPONTRAIT_SWORD).put("War", 1);
+
+		addWeaponTemplate("Sword",			"Sword",		"");
+		addWeaponTemplate("Backsword",		"Backsword",	"");
+		addWeaponTemplate("Scythe", 		"Scythe", 		"");
+		addWeaponTemplate("Stiletto",		"Sword", 		"Foil");
+		addWeaponTemplate("Rapier",			"Sword", 		"Handguard;Light");
+		addWeaponTemplate("Broad sword",	"Sword", 		"War");
+		addWeaponTemplate("Falchion",		"Backsword", 	"War;Handguard");
+		addWeaponTemplate("Sabre",			"Backsword", 	"Handguard");
+		addWeaponTemplate("Cavalry sabre",	"Backsword", 	"Handguard;Long blade");
+		addWeaponTemplate("Katana",			"Backsword", 	"War;Light");
+		addWeaponTemplate("Odachi",			"Backsword", 	"Long blade;War;Light");
+		addWeaponTemplate("Two-handed sword","Sword", 		"Long blade");
+		addWeaponTemplate("Claymore",		"Sword", 		"Long blade;Long blade;Weaponcatch;War");
+		addWeaponTemplate("War scythe",		"Scythe", 		"War;Long shaft");
+
+		addWeaponTemplate("Trident",		"Sword", 		"Weaponcatch;War;Long shaft");
+		addWeaponTemplate("Naginata",		"Backsword", 	"War;Light;Long shaft");
+
+		
+		//Polearms
+		allowedModifiers.put(WEAPONTRAIT_POLEARM, new HashMap<String, Integer>());
+		allowedModifiers.get(WEAPONTRAIT_POLEARM).put("Gemstone", 3);
+		allowedModifiers.get(WEAPONTRAIT_POLEARM).put("Throwing", 1);
+		allowedModifiers.get(WEAPONTRAIT_POLEARM).put("War", 1);
+		allowedModifiers.get(WEAPONTRAIT_POLEARM).put("Light", 1);
+		allowedModifiers.get(WEAPONTRAIT_POLEARM).put("Long shaft", 3);
+		allowedModifiers.get(WEAPONTRAIT_POLEARM).put("Spiked", 1);
+
+		addWeaponTemplate("Staff",			"Staff", 	"");
+		addWeaponTemplate("Quarterstaff",	"Staff", 	"Long shaft");
+		addWeaponTemplate("Long staff",		"Staff", 	"Long shaft;Long shaft");
+		addWeaponTemplate("Pike",			"Staff", 	"Spiked;Long shaft");
+
+		/*
+		Ahlspeiss	+4	10sp	2	2	-	+8	Slash	0	+5	Metal	3.5	B
+		Bardiche	+8	10sp	2	2	-	+12	Slash	0	+9	Metal	9	B
+		Flail staff	+4	30bp	2	3	-	+9	Blunt	0	+7	Metal	5	B
+		Glaive	+4	2sp	2	2	-	+9	Slash	0	+6	Metal	3.5	B
+		Halberd	+4	3sp	2	2	-	+7	Slash	0	+7	Metal	5	B
+		Partisan	+6	2sp	2	2	-	+6	Pierce	+2	+3	Metal	2.5	B
+		Ranseur	+3	3sp	2	3	-	+8	Pierce	+2	+5	Metal	4	B
+		Voulge	+11	30sp	2	3	-	+11	Slash	0	+5	Metal	4.5	B
+		*/
+
+
+		//Bows
+		allowedModifiers.put(WEAPONTRAIT_BOW, new HashMap<String, Integer>());
+		allowedModifiers.get(WEAPONTRAIT_BOW).put("Gemstone", 2);
+		allowedModifiers.get(WEAPONTRAIT_BOW).put("Composite", 1);
+		allowedModifiers.get(WEAPONTRAIT_BOW).put("Recurve", 1);
+
+		addWeaponTemplate("Short bow",		"Short bow",	"");
+		addWeaponTemplate("Hunter bow",		"Hunter bow", 	"");
+		addWeaponTemplate("Long bow",		"Long bow", 	"");
+		addWeaponTemplate("Strong bow",		"Long bow", 	"Composite");
+		addWeaponTemplate("War bow",		"Long bow", 	"Recurve;Composite");
+
+		//Arrow
+		allowedModifiers.put(WEAPONTRAIT_ARROW, new HashMap<String, Integer>());
+		allowedModifiers.get(WEAPONTRAIT_ARROW).put("Armor piercing", 1);
+		allowedModifiers.get(WEAPONTRAIT_ARROW).put("Blunt", 1);
+		allowedModifiers.get(WEAPONTRAIT_ARROW).put("Broad", 1);
+		allowedModifiers.get(WEAPONTRAIT_ARROW).put("Incendiary", 1);
+		allowedModifiers.get(WEAPONTRAIT_ARROW).put("Expansive", 1);
+		allowedModifiers.get(WEAPONTRAIT_ARROW).put("Explosive", 1);
+		allowedModifiers.get(WEAPONTRAIT_ARROW).put("Tracer", 1);
+
+		addWeaponTemplate("Arrow",			"Arrow",	"");
+		addWeaponTemplate("Piercing arrow",	"Arrow", 	"Armor piercing");
+		addWeaponTemplate("Blunt arrow",	"Arrow", 	"Blunt");
+		addWeaponTemplate("Broad arrow",	"Arrow", 	"Broad");
+		addWeaponTemplate("Incendiary arrow","Arrow", 	"Incendiary");
+		addWeaponTemplate("Expansive arrow","Arrow", 	"Expansive");
+		addWeaponTemplate("Explosive arrow","Arrow", 	"Explosive");
+		addWeaponTemplate("Tracer arrow",	"Arrow", 	"Tracer");
+
+
+		//Crossbows
+		allowedModifiers.put(WEAPONTRAIT_CROSSBOW, new HashMap<String, Integer>());
+		allowedModifiers.get(WEAPONTRAIT_CROSSBOW).put("Additional shot", 20);
+		allowedModifiers.get(WEAPONTRAIT_CROSSBOW).put("Gemstone", 2);
+		allowedModifiers.get(WEAPONTRAIT_CROSSBOW).put("Chamber", 1);
+		allowedModifiers.get(WEAPONTRAIT_CROSSBOW).put("Composite", 1);
+		allowedModifiers.get(WEAPONTRAIT_CROSSBOW).put("Magazine", 1);
+		allowedModifiers.get(WEAPONTRAIT_CROSSBOW).put("Quick shot", 1);
+		allowedModifiers.get(WEAPONTRAIT_CROSSBOW).put("Recurve", 1);
+		allowedModifiers.get(WEAPONTRAIT_CROSSBOW).put("Targetting", 20);
+
+		addWeaponTemplate("Hand crossbow",		"Hand crossbow",	"");
+		addWeaponTemplate("Light crossbow",		"Light crossbow", 	"");
+		addWeaponTemplate("Heavy crossbow",		"Heavy crossbow", 	"");
+		addWeaponTemplate("Repeating crossbow",	"Light crossbow", 	"Chamber;Additional shot;Additional shot;Additional shot;Additional shot;Additional shot");
+		addWeaponTemplate("War crossbow",		"Heavy crossbow", 	"Recurve;Composite;Targetting;Targetting");
+
+		//Bolt
+		allowedModifiers.put(WEAPONTRAIT_BOLT, new HashMap<String, Integer>());
+		allowedModifiers.get(WEAPONTRAIT_BOLT).put("Armor piercing", 1);
+		allowedModifiers.get(WEAPONTRAIT_BOLT).put("Blunt", 1);
+		allowedModifiers.get(WEAPONTRAIT_BOLT).put("Broad", 1);
+		allowedModifiers.get(WEAPONTRAIT_BOLT).put("Incendiary", 1);
+		allowedModifiers.get(WEAPONTRAIT_BOLT).put("Expansive", 1);
+		allowedModifiers.get(WEAPONTRAIT_BOLT).put("Explosive", 1);
+		allowedModifiers.get(WEAPONTRAIT_BOLT).put("Tracer", 1);
+
+		addWeaponTemplate("Bolt",			"Bolt",	"");
+		addWeaponTemplate("Piercing bolt",	"Bolt",	"Armor piercing");
+		addWeaponTemplate("Blunt bolt",		"Bolt", "Blunt");
+		addWeaponTemplate("Broad bolt",		"Bolt", "Broad");
+		addWeaponTemplate("Incendiary bolt","Bolt", "Incendiary");
+		addWeaponTemplate("Expansive bolt",	"Bolt", "Expansive");
+		addWeaponTemplate("Explosive bolt",	"Bolt", "Explosive");
+		addWeaponTemplate("Tracer bolt",	"Bolt", "Tracer");
+
+		//Shield
+		/*
+		allowedModifiers.put(WEAPONTRAIT_SHIELD, new HashMap<String, Integer>());
+		allowedModifiers.get(WEAPONTRAIT_SHIELD).put("Lantern", 1);
+		allowedModifiers.get(WEAPONTRAIT_SHIELD).put("Reinforced", 20);
+		allowedModifiers.get(WEAPONTRAIT_SHIELD).put("Spiked shield", 20);
+
+		addWeaponTemplate("Buckler",		"Buckler",		"");
+		addWeaponTemplate("Medium shield",	"Medium shield","");
+		addWeaponTemplate("Body shield",	"Body shield",	"");
+		addWeaponTemplate("Tower shield",	"Tower shield",	"");
+		addWeaponTemplate("Lantern shield",	"Buckler",		"Lantern");
+		Buckler
+		Medium shield
+		Body shield
+		Tower shield
+		Lantern
+		Reinforced
+		Spiked shield
+*/
+		
+	}
+
+	//A list with the current weapon modifiers and how many
+	private HashMap<String, Integer> modifierList = new HashMap<String, Integer>();
+	
+	public Weapon(String name, String trait, String subtrait, String dr, String price, String hands,
+			String reach, String range, String attack, String dmgType,
+			String parry, String ap, String material, String weight, String size, String nAttacks, String chamberCap) {
+		super(name, ITEMSUBTYPE_WEAPON, trait, subtrait, dr, price, material, weight);
+		
+		addAttribute(ATTRIBUTE_HANDS, 	Attribute.ATTRIBUTETYPE_NUMBER, hands);
+		addAttribute(ATTRIBUTE_REACH,	Attribute.ATTRIBUTETYPE_NUMBER, reach);
+		addAttribute(ATTRIBUTE_RANGE,	Attribute.ATTRIBUTETYPE_NUMBER, range);
+		addAttribute(ATTRIBUTE_ATTACK,	Attribute.ATTRIBUTETYPE_NUMBER, attack);
+		addAttribute(ATTRIBUTE_DMGTYPE, Attribute.ATTRIBUTETYPE_DAMAGETYPE, dmgType);
+		addAttribute(ATTRIBUTE_PARRY,	Attribute.ATTRIBUTETYPE_NUMBER, parry);
+		addAttribute(ATTRIBUTE_AP,		Attribute.ATTRIBUTETYPE_NUMBER, ap);
+		addAttribute(ATTRIBUTE_SIZE,	Attribute.ATTRIBUTETYPE_NUMBER, size);
+		addAttribute(ATTRIBUTE_NATTACKS,Attribute.ATTRIBUTETYPE_NUMBER, nAttacks);
+		addAttribute(ATTRIBUTE_CHAMBERCAP,Attribute.ATTRIBUTETYPE_NUMBER, chamberCap);
+		
+	}
+
+	protected HashMap<String, Integer> getModifierList() {
+		return modifierList;
+	}
+
+	public HashMap <String, Integer> getAllowedModifiers(String trait) {
+		return allowedModifiers.get(trait);
+	}
+	
+	public static Set<String> getTemplateList() {
+		return templateBase.keySet();
+	}
+
+	protected static Weapon newBaseWeapon(String name) {
+		if(name.equalsIgnoreCase("Hand Axe")) 	return new Weapon("Hand Axe", 			WEAPONTRAIT_AXE, 		WEAPONSUBTRAIT_MELEE, 		"1",	"100bp",	"1","1",	"1",	"3",	"Slash","0",	"2",	"Metal","1",	"1", "10000", "0");
+		
+		if(name.equalsIgnoreCase("Medium Axe")) return new Weapon("Medium Axe",			WEAPONTRAIT_AXE, 		WEAPONSUBTRAIT_MELEE, 		"3",	"500bp",	"1","1",	"0.5",	"6",	"Slash","0",	"4",	"Metal","2",	"2", "10000", "0");
+		if(name.equalsIgnoreCase("Broad Axe")) 	return new Weapon("Broad Axe",			WEAPONTRAIT_AXE, 		WEAPONSUBTRAIT_MELEE, 		"6",	"1000bp",	"1","1",	"0.25",	"9",	"Slash","0",	"6",	"Metal","4",	"3", "10000", "0");
+	
+		//Blunt
+		if(name.equalsIgnoreCase("Club")) 		return new Weapon("Club", 				WEAPONTRAIT_BLUNT, 		WEAPONSUBTRAIT_MELEE, 	"0",	"10bp",		"1","1","-","2","Blunt","0","2","Wood","1","2", "10000", "0");
+		if(name.equalsIgnoreCase("Hammer")) 	return new Weapon("Hammer",				WEAPONTRAIT_BLUNT, 		WEAPONSUBTRAIT_MELEE, 	"6",	"500bp",	"1","1","0.5","6","Blunt","0","4","Metal","5","2", "10000", "0");
+		if(name.equalsIgnoreCase("Mace")) 		return new Weapon("Mace",				WEAPONTRAIT_BLUNT, 		WEAPONSUBTRAIT_MELEE, 	"4",	"100bp",	"1","1","-","4","Blunt","0","3","Metal","3","2", "10000", "0");
+	
+		//Flexible
+		if(name.equalsIgnoreCase("Chain")) 		return new Weapon("Chain", 				WEAPONTRAIT_FLEXIBLE, 	WEAPONSUBTRAIT_MELEE, 	"2",	"500bp","1","2","0.25","2","Blunt","0","4","Metal","3","3", "10000", "0");
+		if(name.equalsIgnoreCase("Rope")) 		return new Weapon("Rope",				WEAPONTRAIT_FLEXIBLE, 	WEAPONSUBTRAIT_MELEE, 	"0",	"10bp","1","2","0.25","0","Blunt","0","4","Cloth","1","3", "10000", "0");
+		if(name.equalsIgnoreCase("Short flail"))return new Weapon("Short flail",		WEAPONTRAIT_FLEXIBLE, 	WEAPONSUBTRAIT_MELEE, 	"2",	"10bp","1","1","1","+2","Blunt","0","2","Wood","0.5","1", "10000", "0");
+		if(name.equalsIgnoreCase("Whip")) 		return new Weapon("Whip", 				WEAPONTRAIT_FLEXIBLE, 	WEAPONSUBTRAIT_MELEE, 	"2",	"10bp","1","1","-","2","Slash","0","4","Leather","2","2", "10000", "0");
+	
+		//Gauntlet
+		if(name.equalsIgnoreCase("Soft Glove")) return new Weapon("Soft Glove", 		WEAPONTRAIT_GAUNTLET, 	WEAPONSUBTRAIT_MELEE, 	"1",	"50bp" ,"1","0","0","0","Blunt","0","0","Leather","0","1", "10000", "0");
+		if(name.equalsIgnoreCase("Hard Glove")) return new Weapon("Hard Glove", 		WEAPONTRAIT_GAUNTLET, 	WEAPONSUBTRAIT_MELEE, 	"3",	"100bp","1","0","0","1","Blunt","0","0","Leather","1","1", "10000", "0");
+		if(name.equalsIgnoreCase("Metal Glove"))return new Weapon("Metal Glove",		WEAPONTRAIT_GAUNTLET, 	WEAPONSUBTRAIT_MELEE, 	"5",	"200bp","1","0","0","2","Blunt","0","0","Metal"  ,"2","1", "10000", "0");
+		if(name.equalsIgnoreCase("Knuckles")) 	return new Weapon("Knuckles",			WEAPONTRAIT_GAUNTLET, 	WEAPONSUBTRAIT_MELEE, 	"2",	"100bp","1","0","0","1","Blunt","0","0","Metal"  ,"0","1", "10000", "0");
+	
+		//Knifes
+		if(name.equalsIgnoreCase("Dagger")) 	return new Weapon("Dagger", 			WEAPONTRAIT_KNIFE, 		WEAPONSUBTRAIT_MELEE, 	"1",	"100bp",	"1",	"0",	"1",	"3",	"Pierce",	"0",	"0",	"Metal",	"0.5",	"1", "10000", "0");
+		if(name.equalsIgnoreCase("Knife")) 		return new Weapon("Knife",				WEAPONTRAIT_KNIFE, 		WEAPONSUBTRAIT_MELEE, 	"2",	"200bp",	"1",	"0",	"1",	"4",	"Slash",	"0",	"1",	"Metal",	"0.5",	"1", "10000", "0");
+		if(name.equalsIgnoreCase("Sickle")) 	return new Weapon("Sickle",				WEAPONTRAIT_KNIFE, 		WEAPONSUBTRAIT_MELEE, 	"2",	"200bp",	"1",	"0",	"-",	"5",	"Slash",	"0",	"2",	"Metal",	"1",	"2", "10000", "0");
+	
+		//Sword
+		if(name.equalsIgnoreCase("Sword")) 		return new Weapon("Sword", 				WEAPONTRAIT_SWORD, 		WEAPONSUBTRAIT_MELEE, 	"3",	"1000bp",	"1",	"1",	"-",	"5",	"Slash",	"0",	"2",	"Metal",	"1.5",	"2", "10000", "0");
+		if(name.equalsIgnoreCase("Backsword")) 	return new Weapon("Backsword",			WEAPONTRAIT_SWORD, 		WEAPONSUBTRAIT_MELEE, 	"4",	"2000bp",	"1",	"1",	"-",	"6",	"Slash",	"0",	"3",	"Metal",	"1.5",	"2", "10000", "0");
+		if(name.equalsIgnoreCase("Scythe")) 	return new Weapon("Scythe",				WEAPONTRAIT_SWORD, 		WEAPONSUBTRAIT_MELEE, 	"4",	"1500bp",	"1",	"1",	"-",	"7",	"Slash",	"0",	"4",	"Metal",	"1.5",	"2", "10000", "0");
+	
+		//Polearms
+		if(name.equalsIgnoreCase("Staff")) 		return new Weapon("Staff", 				WEAPONTRAIT_POLEARM, 	WEAPONSUBTRAIT_MELEE, 	"1",	"20bp",		"2",	"1",	"-",	"3",	"Blunt",	"0",	"3",	"Wood",	"2",	"2", "10000", "0");
+	
+		//Bows
+		if(name.equalsIgnoreCase("Short bow")) 	return new Weapon("Short bow", 			WEAPONTRAIT_BOW, 		WEAPONSUBTRAIT_RANGED, 	"2",	"200bp",	"2",	"-",	"10",	"-",	"-",	"0",	"4",	"Wood",		"1",	"1", "10000", "1");
+		if(name.equalsIgnoreCase("Hunter bow")) return new Weapon("Hunter bow", 		WEAPONTRAIT_BOW, 		WEAPONSUBTRAIT_RANGED, 	"3",	"400bp",	"2",	"-",	"30",	"-",	"-",	"0",	"6",	"Wood",		"2",	"2", "10000", "1");
+		if(name.equalsIgnoreCase("Long bow")) 	return new Weapon("Long bow", 			WEAPONTRAIT_BOW, 		WEAPONSUBTRAIT_RANGED, 	"4",	"600bp",	"2",	"-",	"50",	"-",	"-",	"0",	"8",	"Wood",		"3",	"3", "10000", "1");
+	
+		//Arrow
+		if(name.equalsIgnoreCase("Arrow")) 		return new Weapon("Arrow", 				WEAPONTRAIT_ARROW, 		WEAPONSUBTRAIT_RANGED, 	"1",	"20bp",		"-",	"-",	"-",	"3",	"P",	"-",	"-",	"Wood",		"0.1",	"1", "1", "0");
+
+		//Crossbows
+		if(name.equalsIgnoreCase("Hand crossbow")) return new Weapon("Hand crossbow",	WEAPONTRAIT_CROSSBOW, 	WEAPONSUBTRAIT_RANGED, 	"5",	"1000bp",	"1",	"-",	"20",	"-",	"-",	"0",	"0/10",	"Metal",	"1",	"1", "10000", "1");
+		if(name.equalsIgnoreCase("Light crossbow"))return new Weapon("Light crossbow",	WEAPONTRAIT_CROSSBOW, 	WEAPONSUBTRAIT_RANGED, 	"4",	"500bp",	"2",	"-",	"60",	"-",	"-",	"0",	"0/15",	"Metal",	"3",	"2", "10000", "1");
+		if(name.equalsIgnoreCase("Heavy crossbow"))return new Weapon("Heavy crossbow",	WEAPONTRAIT_CROSSBOW, 	WEAPONSUBTRAIT_RANGED, 	"6",	"1500bp",	"2",	"-",	"180",	"-",	"-",	"0",	"0/20",	"Metal",	"8",	"3", "10000", "1");
+	
+		//Bolt
+		if(name.equalsIgnoreCase("Bolt")) 		return new Weapon("Bolt", 				WEAPONTRAIT_BOLT, 		WEAPONSUBTRAIT_RANGED, 	"2",	"30bp",		"-",	"-",	"-",	"6",	"P",	"-",	"-",	"Wood",		"0.2",	"1", "1", "0");
+
+		return null;
+	}
+
+	
+	//This method will return a weapon, properly initialized and with appropriate modifiers ny requesting it by name
+	//Additional modifiers can be applied later
+	public static Weapon get(String name) {
+		Weapon res = null;
+
+		//Look for the weapon inside each subclass
+		if(getTemplateList().contains(name)) {
+			String base = templateBase.get(name);
+			if(base == null)
+				return null;
+
+			res = newBaseWeapon(base);
+			res.setAttribute(ATTRIBUTE_NAME, name);
+
+			String modifiers = templateModifiers.get(name);
+			if(modifiers.length() > 0) 
+				res.applyModifiers(modifiers);
+
+		} 
+		else {
+			System.out.println("Weapon::getWeapon - Unable to find the weapon " + name + " in the weapon classes");
+		}
+
+		return res;
+	}
+
+	//Tests if this modifier can be adjusted by the specified modifier (
+	private Weapon modify(Weapon m) {
+		String modName = m.getAttribute(ATTRIBUTE_NAME).getResult();
+		String weaponTrait = getAttribute(ATTRIBUTE_TRAIT).getResult();
+		String weaponName = getAttribute(ATTRIBUTE_NAME).getResult();
+		
+		if(!getAllowedModifiers(weaponTrait).containsKey(modName)) {
+			System.out.println("Weapon::modify - Unable to apply the modifier " + modName + " on weapon " + weaponName + ". Modifier not allowed.");
+			return this;			
+		}
+
+		if(!modifierList.containsKey(modName)) {
+			modifierList.put(modName, 0);
+		}
+		
+		if(modifierList.get(modName) >= getAllowedModifiers(weaponTrait).get(modName)) {
+			System.out.println("Weapon::modify - Unable to apply the modifier " + modName + " on weapon " + weaponName + ". Maximum limit reached.");
+			return this;
+		}
+		
+		addModifier(m);
+		
+		//Increase the modifier count
+		modifierList.put(modName, modifierList.get(modName) + 1);
+		
+		//Unique condition, if the modifier is Long shaft then the trait changes to polearm
+		//PROBLEM: If the weapon changes traits, then the allowed modifiers will change and may not be compatible.
+		// The long shaft modifier must go last in the list
+		if(m.getAttribute(ATTRIBUTE_NAME).getResult().equals("Long shaft"))
+			setAttribute(ATTRIBUTE_TRAIT, WEAPONTRAIT_POLEARM);
+		
+		return this;
+	}
+
+	//Apply the requested modifiers to the weapon. The modifiers are separated by semicolons
+	public Weapon applyModifiers(String modifiers) {
+		
+		while(modifiers.length() > 0) {
+			String modifier = StringUtils.getValueBefore(modifiers, ";");
+			modifiers = StringUtils.getValueAfter(modifiers, ";");
+			
+			Weapon mod = WeaponModifier.getModifier(modifier);
+			if(mod != null) {
+				modify(mod);
+			}
+			else {
+				System.out.println("Weapon::applyModifiers - Modifier " + modifier + " not found for weapon " + getAttribute(ATTRIBUTE_NAME).getResult());
+			}
+		}
+		return this;
+	}
+
+	//Table print assistance
+	public static String headerString() {
+		return ATTRIBUTE_NAME + "\t" + 
+				//ATTRIBUTE_TRAIT + "\t" + 
+				ATTRIBUTE_DR + "\t" +  
+				ATTRIBUTE_PRICE + "\t" +  
+				ATTRIBUTE_HANDS + "\t" +  
+				ATTRIBUTE_REACH + "\t" +  
+				ATTRIBUTE_RANGE + "\t" +  
+				ATTRIBUTE_ATTACK + "\t" +  
+				ATTRIBUTE_DMGTYPE + "\t" + 
+				ATTRIBUTE_PARRY + "\t" +  
+				ATTRIBUTE_AP + "\t" +  
+				ATTRIBUTE_MATERIAL + "\t" + 
+				ATTRIBUTE_WEIGHT + "\t" + 
+				ATTRIBUTE_SIZE;
+	}
+
+	public static String getDocumentFormatTable(String trait) {
+		String res = trait + "\n" + headerString() + "\n";
+
+		java.util.ArrayList<String> allBaseTable = new java.util.ArrayList<String>();
+		java.util.HashSet<String> thisBaseWeapons = new java.util.HashSet<String>();
+		
+		java.util.HashSet<String> allBaseList = new java.util.HashSet<String>();
+		for(String s : getTemplateList()) {
+			if(templateBase.get(s).equals(s) && templateModifiers.get(s).length() == 0)
+				allBaseList.add(s);
+		}
+		
+		for(String s : allBaseList) {
+			Weapon wd = Weapon.get(s);
+			if(wd.getAttribute(ATTRIBUTE_TRAIT).getResult().equals(trait)) {
+				allBaseTable.add(wd.toString());
+				thisBaseWeapons.add(s);
+			}
+		}
+		
+		java.util.ArrayList<String> allSpecificTable = new java.util.ArrayList<String>();
+		java.util.ArrayList<String> weaponModifiers = new java.util.ArrayList<String>();
+		for(String s : templateBase.keySet()) {
+			if(!allBaseList.contains(s)) {	//Ignore the weapons in the base list
+				Weapon weapon = Weapon.get(s);
+				if(weapon.getAttribute(ATTRIBUTE_TRAIT).getResult().equals(trait)) {	//Allow weapons of the required trait only
+					//Add the weapon to the list os specifics
+					allSpecificTable.add(weapon.toString());
+					
+					//Add the weapon to the description
+					HashMap<String, Integer> modList = weapon.getModifierList();
+					String mList = "";
+					if(modList.size() > 0) {
+						for(String mod : modList.keySet()) {
+							if(mList.length() > 0) mList += ", ";
+							mList += mod;
+							if(modList.get(mod) > 1)
+								mList += "(x" + modList.get(mod) + ")";
+						}
+					}
+					
+					String wm = s + ": " + templateBase.get(s);
+					if(mList.length() > 0) 
+						wm += "; " + mList + ".";
+					else 
+						wm += ".";
+					weaponModifiers.add(wm);
+				}
+			}
+		}
+
+		//Sort and output the base table
+		Collections.sort(allBaseTable);
+		for(String s:allBaseTable)
+			res += s + "\n";
+
+		res += 	"\nSpecialized\n";
+		Collections.sort(allSpecificTable);
+		for(String s:allSpecificTable)
+			res += s + "\n";
+
+		res += 	"\nSpecialized\n";
+		Collections.sort(weaponModifiers);
+		for(String s:weaponModifiers)
+			res += s + "\n";
+		
+		return res;
+	}
+
+	public String toString() {
+		String w = getAttribute(ATTRIBUTE_WEIGHT).getResult();
+		if(!w.equals("-")) {
+			Double dW = Double.parseDouble(w);
+			if(dW < 0.1) dW = 0.1;	//Min weight
+			dW = Math.floor(dW*100) / 100;
+			w = ""+dW;
+		}
+		
+		String s = getAttribute(ATTRIBUTE_SIZE).getResult();
+		if(!s.equals("-")) {
+			Double dS = Double.parseDouble(s);
+			dS = Math.floor(dS*100) / 100;
+			s = ""+dS.intValue();
+		}
+
+		String ap = getAttribute(ATTRIBUTE_AP).getResult();
+		ap = ((ap.startsWith("+") || ap.startsWith("-"))?"":"+") + ap; 
+		if(this instanceof Weapon) {
+			String rap = "";
+			while(ap.length() > 0) {
+				String tap = com.spritekin.utils.StringUtils.getValueBefore(ap, "/");
+				ap = com.spritekin.utils.StringUtils.getValueAfter(ap, "/");
+				
+				if(!tap.equals("-")) {
+					if(tap.startsWith("+")) 
+						tap = "" + (6 + Integer.parseInt(tap.substring(1)));
+					else if(tap.startsWith("-")) 
+						tap = "" + (6 - Integer.parseInt(tap.substring(1)));						
+					else
+						tap = "" + (6 + Integer.parseInt(tap));
+						
+
+				}
+				if(rap.length() > 0) rap += "/";
+				rap += tap;	
+			}
+			ap = rap;
+		}
+
+		String dr = getAttribute(ATTRIBUTE_DR).getResult();
+		dr = (dr.startsWith("+")?"":"+") + dr; 
+
+		String attack = getAttribute(ATTRIBUTE_ATTACK).getResult();
+		attack = ((attack.startsWith("+") || attack.startsWith("-")) ?"":"+") + attack; 
+
+		String parry = getAttribute(ATTRIBUTE_PARRY).getResult();
+		parry = ((parry.startsWith("+") || parry.startsWith("-")) ?"":"+") + parry; 
+
+		String range = getAttribute(ATTRIBUTE_RANGE).getResult();
+		if(!range.equals("-") && !range.startsWith("*") && !range.startsWith("+")) {
+			Double dRange = Double.parseDouble(range);
+			range = "Fire";
+			if(dRange == 0) {
+				range = "-";
+			}
+			if(dRange < 1) 
+				range += "/" + (int)(1/dRange); 
+			else if (dRange > 1) {
+				range += "*" + dRange.intValue();
+			}			
+		}
+
+		
+		return getAttribute(ATTRIBUTE_NAME).getResult() + 
+				"\t" + dr + 
+				"\t" + getAttribute(ATTRIBUTE_PRICE).getResult() + 
+				"\t" + getAttribute(ATTRIBUTE_HANDS).getResult() + 
+				"\t" + getAttribute(ATTRIBUTE_REACH).getResult() + 
+				"\t" + range + 
+				"\t" + attack + 
+				"\t" + getAttribute(ATTRIBUTE_DMGTYPE).getResult() + 
+				"\t" + parry + 
+				"\t" + ap + 
+				"\t" + getAttribute(ATTRIBUTE_MATERIAL).getResult() + 
+				"\t" + w + 
+				"\t" + s;
+	}
+
+}
+
+

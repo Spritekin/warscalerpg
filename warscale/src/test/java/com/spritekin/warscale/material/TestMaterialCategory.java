@@ -1,7 +1,7 @@
 package com.spritekin.warscale.material;
 
 import com.spritekin.warscale.WarscaleTestCase;
-
+import com.spritekin.warscale.core.Library;
 import com.spritekin.warscale.core.PropertyFactory;
 import com.spritekin.warscale.core.ReferenceTable;
 import com.spritekin.warscale.core.WarscaleObject;
@@ -26,16 +26,16 @@ public class TestMaterialCategory extends WarscaleTestCase {
 
 	public void testMaterialCategoryTable() {
 		System.out.println("TestMaterialCategory::testMaterialCategoryTable");
-		ReferenceTable mct = ReferenceTable.fromWarscaleYAML("resources/items/MaterialCategory.yml");
+		ReferenceTable mct = Library.get("MaterialCategory");
 
 		// Test direct value access
 		assert mct.getValue(MaterialCategory.METAL, MaterialCategory.BASEHARDNESS).equals("12") : "Invalid material hardness: expected 12, found " + mct.getValue(MaterialCategory.METAL, MaterialCategory.BASEHARDNESS);
-
+		
 	}
 
 	public void testMaterialCategoryProperty() {
 		System.out.println("TestMaterialCategory::testMaterialCategoryProperty");
-		WarscaleObject parent = new WarscaleObject("Parent Object", null);
+		WarscaleObject parent = new WarscaleObject("Parent Object");
 		MaterialCategoryProperty mcp = (MaterialCategoryProperty)PropertyFactory.newPropertyOfType(MaterialCategory.MATERIALCATEGORY, parent, "TestMaterialCategoryProperty");
 		mcp.setBase(MaterialCategory.METAL);
 		assert mcp.getValue().equals(MaterialCategory.METAL) :

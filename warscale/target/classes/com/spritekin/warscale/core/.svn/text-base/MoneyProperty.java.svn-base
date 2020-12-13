@@ -1,0 +1,61 @@
+package com.spritekin.warscale.core;
+
+import javax.script.ScriptException;
+import java.util.HashMap;
+
+import com.spritekin.warscale.core.Expression;
+import com.spritekin.warscale.currency.Money;
+
+//A money attribute treats the values as numbers but will operate the values using a money object
+// ==       : The value is set to this amount regardless of any past operations
+
+public class MoneyAttribute extends Attribute {	
+
+	public MoneyAttribute(WarscaleObject parent, String name) {
+		super(parent, name);
+		setType(ATTRIBUTETYPE_MONEY);
+	}
+		
+	public void recomputeAttributeTotal() {
+		String res = base.getExpression();
+
+		//Id the base is an operator this is probably a modifier, ignore
+		if(!(res.startsWith("==") || res.startsWith("x") || res.startsWith("*") || res.startsWith("+") || res.startsWith("-"))) { 
+			Money mny = new Money();
+			if(!mny.isValidMoneyExpr(res)) res+="bp";
+			if(!mny.isValidMoneyExpr(res)) { 
+				System.out.println("MoneyAttribute::recomputeAttributeTotal - Invalid money expression " + res); 
+			} 
+			else {
+				mny.set(res);
+		
+				for(Expression mod : getModifiers()) {
+					if(mod.isEmpty())
+						continue;
+					
+					HashMap<String, String> vars = mod.getVariableList();
+					vars = gatherVariableData(vars);
+					String modResult = mod.evaluate(vars);
+					
+					if(modResult.startsWith("=="))
+						res = modResult.substring(2);
+					else if(modResult.startsWith("x") || modResult.startsWith("*")) {
+						mny.scale(Double.parseDouble(modResult.substring(1)));
+					}
+					else if(modResult.startsWith("+")) {
+						mny.add(modResult.substring(1) + "bp");
+					}
+					else {	//If it has no prefix, assume an addition
+						mny.add(modResult + "bp");
+					}
+				}
+				
+				res = mny.getAs("bp");
+	
+			}
+		}
+		setResult(res);
+	}
+
+	
+}

@@ -1,5 +1,7 @@
 package com.spritekin.warscale.core;
 
+import java.util.ArrayList;
+
 import com.spritekin.warscale.WarscaleTestCase;
 
 import com.spritekin.warscale.core.DataType;
@@ -12,18 +14,21 @@ public class TestWarscaleObject extends WarscaleTestCase {
 	public void testObjectCreation() {
 		
 		System.out.println("TestWarscaleObject::testObjectCreation");
+		
+		WarscaleObject o = new WarscaleObject("TestItem", Item.ITEM)
+				.addProperty(WarscaleObject.SUBTYPE, DataType.TEXT, Item.WEAPON, false)
+				.addProperty(WarscaleObject.TRAITS, DataType.TEXT, Weapon.WEAPONTRAIT_SWORD);
 
-		WarscaleObject o = new WarscaleObject("TestItem", Item.ITEM, Item.WEAPON, Weapon.WEAPONTRAIT_SWORD, Weapon.WEAPONSUBTRAIT_MELEE, null);
-		assert 	Weapon.WEAPONTRAIT_SWORD == o.getPropertyValue(Item.TRAIT): "Invalid trait";
+		assert 	Weapon.WEAPONTRAIT_SWORD.equals(o.getPropertyValue(Item.TRAITS)): "Invalid trait";
 
 	}
 	
 	// Tests if a property can access the values from another property in an object
 	public static void testPropertyReferences() {
 		System.out.println("TestWarscaleObject::testPropertyReferences");
-		WarscaleObject parent = new WarscaleObject("Parent", null);
-		parent.addProperty("a", DataType.NUMBER, "1");
-		parent.addProperty("b", DataType.NUMBER, "[a]");
+		WarscaleObject parent = new WarscaleObject("Parent")
+			.addProperty("a", DataType.NUMBER, "1")
+			.addProperty("b", DataType.NUMBER, "[a]");
 		
 		assert parent.getPropertyValue("b").equals("1") : "Invalid value: expected 1, found" + parent.getPropertyValue("b");		
 	}
@@ -32,9 +37,9 @@ public class TestWarscaleObject extends WarscaleTestCase {
 	// Tests if a property can access the values from another property which in is an object in turn
 	public static void testComplexPropertyReferences() {
 		System.out.println("TestWarscaleObject::testComplexPropertyReferences");
-		WarscaleObject parent = new WarscaleObject("Parent", null);
-		parent.addProperty("a", DataType.NUMBER, "1");
-		parent.addProperty("b", DataType.NUMBER, "[a]");
+		WarscaleObject parent = new WarscaleObject("Parent")
+			.addProperty("a", DataType.NUMBER, "1")
+			.addProperty("b", DataType.NUMBER, "[a]");
 		
 		assert parent.getPropertyValue("b").equals("1") : "Invalid value: expected 1, found" + parent.getPropertyValue("b");		
 	}

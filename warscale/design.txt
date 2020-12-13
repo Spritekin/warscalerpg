@@ -9,33 +9,30 @@ This includes:
 - Expression - Text string that holds a value declaration, may be on the form of a function.
 - Property - A expression that can be adjusted by other properties.
 - WarscaleObject - All warscale objects inherit from this.
-- ReferenceTable - Used to load a data table
+- ReferenceTable - A collection of objects.
+- Library - All the tables.
 
 Warscale objects
-Warscale has 2 levels of objects, very similar to Java classes and instances. All of them use the WarscaleObject class.
+A warscale object is an entity made of properties and relations between objects. This is pretty much like class composition,
+it contains a list of properties (with) and a list of mounted objects (has).
+For example, a warrior with race human and with strength 3 has a sword.
 
-Classes
-- A warscale class is a declaration of a concept, for example a material or a race. A Warcale class does declare a latent relation between
-  classes, for example a sword is made of steel, or a Medusa has a Flesh to stone gaze power. However those are just blueprints of objects.
-  So it is possible to build a lot of steel swords from the same class.
-- Classes are kept in the main warscale libraries which contains all the concepts.
-- Relations of objects in the classes are timeless but can be marked with a minimum level which says when it should be applied.
-- No effects are affecting a class. No need to keep track of time or reason for a effect.
+A property is an inherent characteristic. A unique trait. For example people intelligence, hair colour, height, are properties.
+Properties are declared as "[shared] name type value". If a property is shared, it will be assigned as an attribute for the parent object
+when the object is mounted in another one.
 
-Instances
-- A warscale instance is an object that has been initialized from a class. An instance inherits all the properties from its base class.
-- While an object may start with the same values as the blueprint, it may be embedded with specific characteristics and powers that make
-  it quite unique. In a way, an instance is a unique class. It exists because it belongs to the world and must exist in a world.
-- Worlds are unique and while they have a time frame it is not a "continuous" time. It is more like an event based time like a book.
+Mounted objects are external factors the object gain. Like a warrior has a sword. Or has a high resistance to damage. Mounted
+objects doesn't need to be physical, they can be skills or special abilities. They are marked with a level so it is only applied
+if the main object reaches a certain level (or 0 if always).
 
 Serialisation
-- A warscale instance can be serialised in order to maintain its state. 
-- A serialised instance keeps the history of all its changes as they level up. For example, a character keeps the history of when it gained levels,
-  which skills were purchased with a level, etc.
-- Only the owner of a character can alter the character. Other users can pick it at a level and use his abilities at that level, but they can't
-  save the character.
+- A warscale object can be serialised in order to save its state. 
+- Only the owner of an object can alter the object. Other users can view the object at different power levels, but they can't
+  modify it.
 
-,
+
+Weapon
+
   { "Elf": 		[ 
 		"Subtype text Humanoid",
   		"Description text Elves are a gracious and good looking humanoids with feline features that live and fiercely protect the forest and all the creatures living within their borders. Elves build their cities on deep forests using nature skills to shape the trees without damaging their environment.",
@@ -114,3 +111,6 @@ Serialisation
   		"Death number 2",
   		"Earth number 2",
   		] },
+  		
+  		
+  Sword

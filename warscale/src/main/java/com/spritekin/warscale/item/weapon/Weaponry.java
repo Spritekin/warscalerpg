@@ -11,7 +11,7 @@ public class Weaponry {
 	//Definitions of templates
 	private static HashMap <String, String> templateBase = new HashMap<String, String>();
 	private static HashMap <String, String> templateModifiers = new HashMap<String, String>();
-
+/*
 	private static void addWeaponTemplate(String name, String base, String modifiers) {		
 		templateBase.put(name, base);
 		templateModifiers.put(name, modifiers);
@@ -131,7 +131,7 @@ public class Weaponry {
 		Voulge	+11	30sp	2	3	-	+11	Slash	0	+5	Metal	4.5	B
 		*/
 
-
+/*
 		//Bows
 		addWeaponTemplate("Short bow",		"Short bow",	"");
 		addWeaponTemplate("Hunter bow",		"Hunter bow", 	"");
@@ -356,7 +356,7 @@ public class Weaponry {
 		
 		return res;
 	}
-
+*/
 
 }
 

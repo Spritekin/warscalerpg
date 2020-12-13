@@ -3,6 +3,7 @@ package com.spritekin.warscale.core;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.spritekin.warscale.item.Item;
 import com.spritekin.warscale.utils.StringUtils;
 
 // grodriguez
@@ -45,6 +46,7 @@ public abstract class Property {
 	protected String value = null;
 	protected ArrayList<Property> modifiers = new ArrayList<Property>();
 	protected boolean shared = false;
+	protected boolean placeholder = false;
 
 	protected Property(WarscaleObject parent, String name, String datatype, String expression) {
 		setName(name);
@@ -56,8 +58,9 @@ public abstract class Property {
 		return parent;
 	}
 
-	private void setParent(WarscaleObject parent) {
+	private Property setParent(WarscaleObject parent) {
 		this.parent = parent;
+		return this;
 	}
 
 	private void invalidate() {
@@ -93,9 +96,10 @@ public abstract class Property {
 		return name;
 	}
 
-	private void setName(String name) {
+	private Property setName(String name) {
 		this.name = name;
 		dirty = true;
+		return this;
 	}
 
 	protected Expression getBase() {
@@ -108,54 +112,59 @@ public abstract class Property {
 		return this;
 	}
 
-	public void setShared(boolean shared) {
+	public Property setShared(boolean shared) {
 		this.shared = shared;
+		return this;
 	}
 
 	public boolean isShared() {
 		return shared;
 	}
 	
-	protected void setValue(String value) {
+	protected Property setValue(String value) {
 		this.value = value;
 		dirty = false;
+		return this;
 	}
 
 	public ArrayList<Property> getPropertyModifiers() {
 		return modifiers;
 	}
 		
-	public void addModifier(Property property) {
+	public Property addModifier(Property property) {
 		if(property == null) {
 			System.out.println("Attribute::addModifier - Improper modifier 'null' added to property " + getName());
-			return;
+			return this;
 		}
 
 		//Properties are very strict, names must match
 		if(!property.getName().equals(getName())) {
 			System.out.println("Attribute::addModifier - The property name " + getName() + " don't match the modifier name " + property.getName());
-			return;
+			return this;
 		}
 		
 		if(!property.getType().equals(getType())) {
 			System.out.println("Attribute::addModifier - The property types don't match " + getName());
-			return;
+			return this;
 		}
 
 		modifiers.add(property);
 		invalidate();
+		return this;
 	}
 
 	// Removes a modifier from the list
-	public void removeModifier(Property property) {
+	public Property removeModifier(Property property) {
 		modifiers.remove(property);
 		invalidate();
+		return this;		
 	}
 
 	// Removes all modifiers from the list
-	public void clearModifiers() {
+	public Property clearModifiers() {
 		modifiers.clear();
 		invalidate();
+		return this;		
 	}
 	
 	// Allow the subclass to build its own operating object
@@ -191,6 +200,7 @@ public abstract class Property {
 	}
 							
 	
+	// Finds out variable data from other properties of the parent
 	protected HashMap<String, String> gatherVariableData(HashMap<String, String> vars) {
 		//Fill in from parent attributes if it exists
 		if( getParent() != null ) {
@@ -201,4 +211,37 @@ public abstract class Property {
 		}
 		return vars;
 	}
+	
+	// Is this modifier a placeholder?
+	public boolean isPlaceholder() {
+		return placeholder;
+	}
+
+	// Marks this modifier as a placeholder
+	public Property setPlaceholder(boolean placeholder) {
+		this.placeholder = placeholder;
+		return this;
+	}
+	
+	// A property is empty if it has no other properties and not labelled as placeholder
+	public boolean isEmpty() {
+		if(isPlaceholder() && modifiers.isEmpty())
+			return true;
+		return false;
+	}
+	
+	public String toString() {
+		String res = getName() + " " + getType() + " " + getValue();
+		if(shared)
+			return "shared " + res;
+		return res;
+	}
+	
+	public static String fqpe(String name, String type, String expression, boolean shared) {
+		String res = name + " " + type + " " + expression;
+		if(shared)
+			return "shared " + res;
+		return res;
+	}
+
 }

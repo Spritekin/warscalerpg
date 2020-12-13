@@ -1,1 +1,13 @@
-/Users/Guimo/eclipse-workspace/warscale/src/test/java/com/spritekin/warscale/AppTest.java
+/Users/Guimo/warscalerpg/warscale/src/test/java/com/spritekin/warscape/skills/TestPower.java
+/Users/Guimo/warscalerpg/warscale/src/test/java/com/spritekin/warscale/material/TestMaterial.java
+/Users/Guimo/warscalerpg/warscale/src/test/java/com/spritekin/warscale/core/TestLibrary.java
+/Users/Guimo/warscalerpg/warscale/src/test/java/com/spritekin/warscale/equipment/weapon/TestWeapon.java
+/Users/Guimo/warscalerpg/warscale/src/test/java/com/spritekin/warscale/WarscaleTestCase.java
+/Users/Guimo/warscalerpg/warscale/src/test/java/com/spritekin/warscale/item/TestItem.java
+/Users/Guimo/warscalerpg/warscale/src/test/java/com/spritekin/warscale/core/TestProperty.java
+/Users/Guimo/warscalerpg/warscale/src/test/java/com/spritekin/warscale/AppTest.java
+/Users/Guimo/warscalerpg/warscale/src/test/java/com/spritekin/warscale/material/TestMaterialCategory.java
+/Users/Guimo/warscalerpg/warscale/src/test/java/com/spritekin/warscale/core/ExpressionTest.java
+/Users/Guimo/warscalerpg/warscale/src/test/java/com/spritekin/warscale/power/TestPower.java
+/Users/Guimo/warscalerpg/warscale/src/test/java/com/spritekin/warscale/core/TestWarscaleObject.java
+/Users/Guimo/warscalerpg/warscale/src/test/java/com/spritekin/warscale/utils/TestStringUtils.java

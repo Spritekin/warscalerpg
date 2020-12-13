@@ -1,0 +1,75 @@
+package com.spritekin.warscale.material;
+
+public class Material {
+
+	private static java.util.HashMap<String, Material> materialSet = new java.util.HashMap<String, Material>();
+
+	static {
+		materialSet.put("Tawny", 	new Material(MaterialCategory.MATERIALCATEGORY_GEMSTONE,	"Tawny",	5,	1));
+		materialSet.put("Pyrite", 	new Material(MaterialCategory.MATERIALCATEGORY_GEMSTONE,	"Pyrite",	10,	1));
+
+	}
+
+	private String name = "";
+	private MaterialCategory category = null;
+	private int quality = 0;
+	private int price = 0;	//In bp
+	private int bonus = 0;
+
+	public Material(String category, String name, int quality, int price) {
+		this.category = MaterialCategory.get(category);
+		this.name = name;
+		this.quality = quality;
+		this.price = price;
+		this.bonus = Math.round((this.quality - 5) / 5);
+	}
+	
+	public Material(MaterialCategory category, String name, int quality) {
+		this.category = category;
+		this.name = name;
+		this.quality = quality;
+		this.bonus = Math.round((this.quality - 5) / 5);
+	}
+
+	
+	public String getName() {
+		return name;
+	}
+
+	public MaterialCategory getCategory() {
+		return category;
+	}
+
+	public int getQuality() {
+		return quality;
+	}
+
+	public int getPrice() {
+		return price;
+	}
+
+	public int getBonus() {
+		return bonus;
+	}
+
+	public boolean isHigherQualityThan(Material other) { 
+		return this.getQuality() > other.getQuality(); 
+	}; 
+
+	public static java.util.ArrayList<Material> getMaterialsForCategory(String categoryName) { 
+		return getMaterialsForCategory(MaterialCategory.get(categoryName));
+	}
+
+	public static java.util.ArrayList<Material> getMaterialsForCategory(MaterialCategory category) { 
+		java.util.ArrayList<Material> res = new java.util.ArrayList<Material>();
+		for(Material m : materialSet.values()) {
+			if(m.getCategory().getName().equals(category.getName()))
+				res.add(m);
+		}
+		return res;
+	}; 
+
+	public static Material get(String materialName) { 
+		return materialSet.get(materialName);
+	}
+}

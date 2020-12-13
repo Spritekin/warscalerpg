@@ -5,11 +5,16 @@ import java.util.HashMap;
 //This class tracks warscale money
 // Money is a collection of coins on different types
 // Money is maintained this way so that the coins on each type are never mixed
+// Money can be expressed as a comma separated string, for example "3gp,4bp" means 3 gold and 4 bronze.
 public class Money {
-	public static String BRONZE_PIECE 		= "bp";
-	public static String SILVER_PIECE 		= "sp";
+	
+	public static String MONEY = "Money";
+	
+	public static String BRONZE_PIECE 	= "bp";
+	public static String SILVER_PIECE 	= "sp";
 	public static String GOLD_PIECE 		= "gp";
 	public static String TITANIUM_PIECE	= "tp";
+
 	protected static HashMap<String, Double> conversion = new HashMap<String, Double>();
 	static {
 		conversion.put(BRONZE_PIECE, 1d);
@@ -18,8 +23,10 @@ public class Money {
 		conversion.put(TITANIUM_PIECE, 1000000d);
 	}
 
+	// A hash with different types of coins
 	protected HashMap<String, Double> coins = new HashMap<String, Double>();
-	
+
+	// By default, we initialize with an empty purse
 	public Money() {
 		coins.put(TITANIUM_PIECE, 0d);
 		coins.put(GOLD_PIECE, 0d);
@@ -27,7 +34,8 @@ public class Money {
 		coins.put(BRONZE_PIECE, 0d);
 	}
 
-	//Initialize using a comma separated string
+	//Initialize using a comma separated string with coin values
+	//
 	public Money(String icoins) {
 		coins.put(TITANIUM_PIECE, 0d);
 		coins.put(GOLD_PIECE, 0d);
@@ -36,14 +44,11 @@ public class Money {
 		set(icoins);
 	}
 
+	// Zeroes all money in this object
 	private void clear() {
 		for(String s : coins.keySet()) {
 			coins.put(s, 0d);
 		}
-	}
-	
-	public HashMap<String, Double> getCoins() {
-		return coins;
 	}
 
 	//Set the coins of a certain type
@@ -81,10 +86,12 @@ public class Money {
 		coins.put(SILVER_PIECE, Math.round(coins.get(SILVER_PIECE) * scale * 100d)/100d);
 		coins.put(BRONZE_PIECE, Math.round(coins.get(BRONZE_PIECE) * scale * 100d)/100d);
 
+		System.out.println("Check scale" + toStringBase());
 		truncate();
 		
 	}
 	
+	// Adds money, keeps coin types separate 
 	public void add(String moneyExpr) {
 		if(!isValidMoneyExpr(moneyExpr))
 			return;
@@ -127,17 +134,17 @@ public class Money {
 	
 	//Returns the money type, basically cuts the last 2 characters from the expression
 	//This works with a single expression, non comma separated
-	private String getMoneyExprType(String moneyExpr) {
+	private static String getMoneyExprType(String moneyExpr) {
 		return moneyExpr.substring(moneyExpr.length()-2);		
 	}
 
 	//Returns the money type, basically cuts the last 2 characters from the expression
-	private Double getMoneyExprValue(String moneyExpr) throws NumberFormatException {
+	private static Double getMoneyExprValue(String moneyExpr) throws NumberFormatException {
 		return Double.parseDouble(moneyExpr.substring(0, moneyExpr.length() - 2));
 	}
 
 	//Checks if this is a valid money expression
-	public boolean isValidMoneyExpr(String moneyExpr) {
+	public static boolean isValidMoneyExpr(String moneyExpr) {
 		while(moneyExpr.length() > 0) {
 			String c = com.spritekin.warscale.utils.StringUtils.getValueBefore(moneyExpr, ",");
 			moneyExpr = com.spritekin.warscale.utils.StringUtils.getValueAfter(moneyExpr, ",");
@@ -157,13 +164,14 @@ public class Money {
 		return true;
 	}
 
-	public boolean isValidType(String currency) {
+	public static boolean isValidType(String currency) {
 		if(currency.equals(BRONZE_PIECE) || currency.equals(SILVER_PIECE) || currency.equals(GOLD_PIECE) || currency.equals(TITANIUM_PIECE))
 			return true;
 		//System.out.println("Money::isValidType - Not a valid value " + currency);
 		return false;
 	}
 	
+	// Get the canonical expression, drop decimals
 	public String toString() {
 		String res = "";
 		if(coins.containsKey(TITANIUM_PIECE) && coins.get(TITANIUM_PIECE) > 1)
@@ -180,13 +188,13 @@ public class Money {
 		}
 
 		if(coins.containsKey(BRONZE_PIECE) && coins.get(BRONZE_PIECE) > 1) {
-			System.out.println("Bronze:" + coins.get(BRONZE_PIECE));			
 			if(res.length() > 0) res += ",";
 			res += (coins.get(BRONZE_PIECE).intValue()) + BRONZE_PIECE;
 		}
 		return res;
 	}
 
+	// Get the canonical expression, do not drop decimals
 	public String toStringBase() {
 		String res = "";
 		if(coins.containsKey(TITANIUM_PIECE) && coins.get(TITANIUM_PIECE) > 1)
@@ -215,18 +223,5 @@ public class Money {
 		Double otherBP = m.toBronze();
 		return thisBP - otherBP;
 	}
-	
-	public static void main(String[] argv) {
-
-		Money m = new Money();
-		m.set("2tp,3gp,4sp,5bp");
-		m.add("20tp,30gp,40sp,50bp");
-		m.scale(2);
-		m.scale(1.7);
-		System.out.println(m.toString());
-		System.out.println(m.toStringBase());
-		
-	}
-
 	
 }

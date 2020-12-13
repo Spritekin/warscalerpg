@@ -9,7 +9,7 @@ import com.spritekin.warscale.material.Material;
 public class WeaponModifier {
 	
 	protected static HashMap<String, Weapon> allModifierList = new HashMap<String, Weapon>();
-
+/*
 	static {
 
 		//Generic
@@ -97,5 +97,5 @@ public class WeaponModifier {
 		
 		return res;
 	}
-
+*/
 }

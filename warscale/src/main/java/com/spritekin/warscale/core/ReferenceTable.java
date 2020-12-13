@@ -4,9 +4,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.json.simple.JSONArray;
@@ -32,7 +35,7 @@ import java.util.logging.Logger;
 
 public class ReferenceTable {
 	
-	// All ReferenceTable subclasses should initialise with their own specific object types
+	// All ReferenceTable subclasses should initialize with their own specific object types
 	protected java.util.Map<String, WarscaleObject> referenceTable = new HashMap<String, WarscaleObject>();
 	protected String name;
 
@@ -44,7 +47,7 @@ public class ReferenceTable {
 		return name;
 	}
 
-	protected java.util.Set<String> getKeys() {
+	public java.util.Set<String> getKeys() {
 		return referenceTable.keySet();
 	}
 
@@ -65,155 +68,16 @@ public class ReferenceTable {
 	}	
 
 	// Check if a key is registered
-	public boolean contains(String key, String propertyName) {
-		return referenceTable.get(key).containsProperty(propertyName);
+	public boolean hasProperty(String key, String propertyName) {
+		return referenceTable.get(key).hasProperty(propertyName);
 	}	
 
-	// THis is the preferred way to get a value form the table
+	// This is the preferred way to get a value from the table
+	// Retrieves a property from an object in a table
 	public String getValue(String key, String propertyName) {
 		return referenceTable.get(key).getPropertyValue(propertyName);
 	}
-	
-	// Load the table from a warscale data file
-	public static ReferenceTable fromWarscaleData(String filename) {
-        JSONParser parser = new JSONParser();
-        try
-        {
-            Object object = parser.parse(new FileReader(filename));
-            
-            //convert Object to JSONObject
-            JSONObject jsonObject = (JSONObject)object;
-            
-            //Fetch the name, this is the reference table name in the library
-            String name = (String) jsonObject.get("Name");
-            if(name == null)
-            		throw new InvalidWarscaleDataException("ReferenceTable::fromWarscaleData - Unable to load the file " + filename + ". Name not specified.");
-            
-            ReferenceTable table = new ReferenceTable(name);
-            
-            // Common for all objects, some may be null.
-            String type = (String) jsonObject.get("Type");
-            if(type==null) type = "";
-            String subtype = (String) jsonObject.get("Subtype");
-            if(subtype==null) subtype = "";
-            String trait = (String) jsonObject.get("Trait");
-            if(trait==null) trait = "";
-            String subtrait = (String) jsonObject.get("Subtrait");
-            if(subtrait==null) subtrait = "";
-            //Printing all the values
-            Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-            logger.finest("Type: " + type);
-            logger.finest("Subtype: " + subtype);
-            logger.finest("Trait: " + trait);
-            logger.finest("Subtrait: " + subtrait);
-            
-            // Specialised
-            JSONArray data = (JSONArray)jsonObject.get("Data");
-            for(Object row : data)
-            {	
-            		//In this data, each entry has a name followed by an array, get the name 
-                JSONObject jsonRow = (JSONObject)row;         
-                Iterator<String> iterator = jsonRow.keySet().iterator();
-                while (iterator.hasNext()) {
-                    String key = iterator.next();
-                    JSONArray properties = (JSONArray)jsonRow.get(key);
-                    String[] stringProperties = new String[properties.size()];
-                    int i = 0;
-                    for(Object property : properties) {
-                    		stringProperties[i++] = (String)property;
-                    }
-                    table.add(new WarscaleObject(key, type, subtype, trait, subtrait, stringProperties));
-                }
-            }
-            return table;
-        }
-        catch(FileNotFoundException fe)
-        {
-            fe.printStackTrace();
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-        
-        // If it fails loading throw an exception
-        throw new InvalidWarscaleDataException("ReferenceTable::fromWarscaleData - Failed to load the data file" + filename);
-	}
-	
-	// Load the table from a warscale yaml file
-	public static ReferenceTable fromWarscaleYAML(String filename) {
-        try
-        {
-	    		Yaml yaml = new Yaml();
-	    			
-	    		Map<String, Object> values = (Map<String, Object>) yaml
-	    				.load(new FileInputStream(new File(filename)));
-	
-	            //Fetch the name, this is the reference table name in the library
-	    		String name = (String) values.get("Name");
-            if(name == null)
-            		throw new InvalidWarscaleDataException("ReferenceTable::fromWarscaleYAML - Unable to load the file " + filename + ". Name not specified.");
-            
-            ReferenceTable table = new ReferenceTable(name);
-
-            // Get common attributes. THis are added to all classes defined in this class
-            String[] commonProperties = null ;        
-            Map<String, Object> commons = (Map<String, Object>)values.get("Common");
-            if( commons != null ) {
-    	            	//A warscale common may define a list of properties like
-    	            // Properties:
-    	            //     - "PropertyName type value"
-    	        		//       ...
-    	        		// Other...
-    	            java.util.ArrayList<String> properties = (java.util.ArrayList<String>)commons.get("Properties");
-    	            commonProperties  = new String[properties.size()];
-    	            properties.toArray(commonProperties);
-    	        }
-
-            // Get all classes
-            Map<String, Object> classlist = (Map<String, Object>)values.get("Class");
-            for(String classkey : classlist.keySet()) {
-                Map<String, Object> wsclass = (Map<String, Object>)classlist.get(classkey);
-
-                	//A warscale class is defined as
-                // Type: MaterialCategory
-                // Properties:
-                //     PropertyName: value
-            		//     ...
-                // Powers:
-                //     PowerName: "value"
-                // Skills:
-                //     SkillName: "value"
-            		// Other...
-
-                String type = (String) wsclass.get("Type");
-                    if(type == null)
-                    		throw new InvalidWarscaleDataException("ReferenceTable::fromWarscaleYAML - Unable to load class " + classkey + " on file " + filename + ". Type not specified.");
-
-                java.util.ArrayList<String> properties = (java.util.ArrayList<String>)wsclass.get("Properties");
-                String[] classProperties  = new String[properties.size()];
-                properties.toArray(classProperties);
-
-                String[] allProperties = (String[]) ArrayUtils.addAll(classProperties, commonProperties);
-                
-                table.add(new WarscaleObject(classkey, type, "", "", "", allProperties));
-            }
-
-            return table;
-        }
-        catch(FileNotFoundException fe)
-        {
-            fe.printStackTrace();
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-        
-        // If it fails loading throw an exception
-        throw new InvalidWarscaleDataException("ReferenceTable::fromWarscaleYAML - Failed to load the data file" + filename);
-	}
-
+		
 	// Merges the contents of the target table into this table. Do not overwrite.
 	public void append(ReferenceTable other) {
 		append(other, false);
@@ -228,4 +92,48 @@ public class ReferenceTable {
 		}
 	}
 	
+	// Create a new empty object, must belong to someone and have a unique name under its library
+	// At least the type and name are required
+	public String createNew(String owner, String name, String type) {	
+		
+		//the name must be unique
+		if(contains(name))
+			return "ERROR: Object already exists";
+
+		WarscaleObject res = new WarscaleObject(name, type, null);
+		res.setOwner(owner);
+		add(res);
+
+		return "ok";
+	}
+
+	// Set multiple properties in an object
+	// If a property fails to set, return the id and stop
+	public String setObjectProperties(String owner, String name, List<String> properties) {	
+
+		//the object must exist
+		if(!contains(name))
+			return "ERROR: Object " + name + " does not exist in library " + this.name + ".";
+		
+		WarscaleObject obj = getObject(name);
+		if(!obj.belongsTo(owner))
+			return "ERROR: Object doesn't belong to " + owner;
+		
+		for(String fqpe : properties) {
+			Property prop = PropertyFactory.newPropertyFromExpression(null, fqpe);
+			// If the object has this property, 
+			if(obj.hasProperty(prop.getName()))
+				obj.setProperty(prop.getName(), prop.getValue());					
+			else
+				obj.addProperty(fqpe);
+		}
+
+		return "ok";
+	}
+
+	/*
+	public static void generateTable() throws RuntimeException {
+		if(Library.contains(MATERIALCATEGORY))
+			throw new RuntimeException("Can't generate table " + MATERIALCATEGORY + " because it already exists on the library.");
+    */
 }

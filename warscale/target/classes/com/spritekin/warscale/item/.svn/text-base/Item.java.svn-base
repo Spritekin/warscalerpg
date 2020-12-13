@@ -1,0 +1,40 @@
+package com.spritekin.warscale.item;
+
+import java.util.ArrayList;
+
+import com.spritekin.warscale.core.Attribute;
+import com.spritekin.warscale.core.Expression;
+import com.spritekin.warscale.core.WarscaleObject;
+
+public abstract class Item extends WarscaleObject {
+	
+	public static String ITEMSUBTYPE_ARMOR 		= "Armor";
+	public static String ITEMSUBTYPE_ARTIFACT 	= "Artifact";
+	public static String ITEMSUBTYPE_CONSUMABLE = "Consumable";
+	public static String ITEMSUBTYPE_EQUIPMENT 	= "Equipment";
+	public static String ITEMSUBTYPE_JEWELLERY 	= "Jewellery";
+	public static String ITEMSUBTYPE_CLOTHING 	= "Clothing";
+	public static String ITEMSUBTYPE_TOOLS 		= "Tools";
+	public static String ITEMSUBTYPE_WEAPON 	= "Weapon";
+
+	
+	public static final String ATTRIBUTE_DR 		= "DR";
+	public static final String ATTRIBUTE_PRICE 		= "Price";
+	public static final String ATTRIBUTE_MATERIAL 	= "Material";
+	public static final String ATTRIBUTE_WEIGHT 	= "Weight";
+
+	
+	protected Item(String name, String subtype, String trait, String subtrait, 
+			String dr, String price, String material, String weight) {
+		super(name, OBJECTTYPE_ITEM, subtype, trait, subtrait);
+		
+		addAttribute(ATTRIBUTE_DR, 			Attribute.ATTRIBUTETYPE_NUMBER, dr);
+		addAttribute(ATTRIBUTE_PRICE,		Attribute.ATTRIBUTETYPE_MONEY, price);
+		addAttribute(ATTRIBUTE_MATERIAL,	Attribute.ATTRIBUTETYPE_MATERIALCATEGORY, material);
+		addAttribute(ATTRIBUTE_WEIGHT,		Attribute.ATTRIBUTETYPE_NUMBER, weight);
+		
+		//modifiers = new ArrayList<Item>();
+
+	}
+
+}

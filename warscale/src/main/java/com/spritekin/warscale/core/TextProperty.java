@@ -3,8 +3,9 @@ package com.spritekin.warscale.core;
 import java.util.HashMap;
 
 //A text attribute treats the values as text. It will try to concatenate the values
-// The values expressions can have the following prefixes
+// Text expressions can have the following prefixes
 // =       : The value is set to this text regardless of any past operations
+// +       : The value is added to the text. This is the default operation.
 
 public class TextProperty extends Property {	
 	
@@ -23,6 +24,8 @@ public class TextProperty extends Property {
 	protected void applyModifier(String modifier) {
 		if(modifier.startsWith("="))
 			accumulator = modifier.substring(1);
+		else if(modifier.startsWith("+"))
+			accumulator = accumulator + modifier.substring(1);
 		else
 			// Text modifiers just add the strings
 			accumulator = accumulator + modifier;

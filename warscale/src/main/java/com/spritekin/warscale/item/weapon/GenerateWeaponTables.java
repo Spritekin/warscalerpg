@@ -1,10 +1,7 @@
 package com.spritekin.warscale.item.weapon;
 
-import test.spritekin.warscale.WarscaleTestCase;
-
-
-public class GenerateWeaponTables extends WarscaleTestCase {
-		
+public class GenerateWeaponTables {
+/*		
 	private static void generateWeaponTables() {
 
 		System.out.println(Weaponry.getDocumentFormatTable(Weapon.WEAPONTRAIT_AXE));
@@ -35,10 +32,11 @@ public class GenerateWeaponTables extends WarscaleTestCase {
 	/**
 	 * @param args
 	 */
+/*
 	public static void main(String[] args) {
 
 		generateWeaponTables();
 
 	}
-
+*/
 }

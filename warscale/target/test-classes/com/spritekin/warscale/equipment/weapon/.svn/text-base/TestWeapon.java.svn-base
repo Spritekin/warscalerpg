@@ -1,0 +1,56 @@
+package test.spritekin.warscale.equipment.weapon;
+
+import com.spritekin.warscale.item.weapon.Weapon;
+import com.spritekin.warscale.item.weapon.WeaponModifier;
+
+public class TestWeapon {
+		
+
+	private static void testWeaponCreation() {
+
+		System.out.println(Weapon.getDocumentFormatTable(Weapon.WEAPONTRAIT_AXE));
+		System.out.println(Weapon.getDocumentFormatTable(Weapon.WEAPONTRAIT_BLUNT));
+		System.out.println(Weapon.getDocumentFormatTable(Weapon.WEAPONTRAIT_FLEXIBLE));
+		System.out.println(Weapon.getDocumentFormatTable(Weapon.WEAPONTRAIT_GAUNTLET));
+		System.out.println(Weapon.getDocumentFormatTable(Weapon.WEAPONTRAIT_KNIFE));
+		System.out.println(Weapon.getDocumentFormatTable(Weapon.WEAPONTRAIT_SWORD));
+		System.out.println(Weapon.getDocumentFormatTable(Weapon.WEAPONTRAIT_POLEARM));
+
+		System.out.println(WeaponModifier.getDocumentFormatTable(Weapon.WEAPONSUBTRAIT_MELEE));
+		
+		
+		System.out.println(Weapon.getDocumentFormatTable(Weapon.WEAPONTRAIT_BOW));
+		System.out.println(Weapon.getDocumentFormatTable(Weapon.WEAPONTRAIT_ARROW));
+
+		System.out.println(Weapon.getDocumentFormatTable(Weapon.WEAPONTRAIT_CROSSBOW));
+		System.out.println(Weapon.getDocumentFormatTable(Weapon.WEAPONTRAIT_BOLT));
+
+		System.out.println(WeaponModifier.getDocumentFormatTable(Weapon.WEAPONSUBTRAIT_RANGED));
+
+		/*
+		public static String WEAPONTRAIT_GAUNTLET = "Gauntlet";
+		public static String WEAPONTRAIT_KNIFE = "Knife";
+		public static String WEAPONTRAIT_SWORD = "Sword";
+		public static String WEAPONTRAIT_POLEARM = "Polearm";
+		public static String WEAPONTRAIT_WHIP = "Whip";
+
+		public static String WEAPONTRAIT_BOW = "Bow";
+		public static String WEAPONTRAIT_CROSSBOW = "Crossbow";
+		public static String WEAPONTRAIT_PISTOL = "Pistol";
+		public static String WEAPONTRAIT_RIFLE = "Rifle";
+
+		public static String WEAPONTRAIT_SHIELD = "Shield";
+		 */
+
+	}
+	
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		testWeaponCreation();
+
+	}
+
+}
